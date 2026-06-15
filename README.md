@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flutter Mastery — Course Management Platform
 
-## Getting Started
+A training course management system for the "Flutter Mastery" course, built with Next.js (App Router), TypeScript, and Tailwind CSS. All data lives entirely in the browser via `localStorage` — there is no backend, database, or SQL involved.
 
-First, run the development server:
+## Roles
+
+- **Admin / Instructor** — manage students, sessions, materials, assignments, and grade submissions from `/dashboard`, `/admin/students`, `/admin/sessions`, `/admin/submissions`.
+- **Student** — view sessions in order, download materials, submit assignments, and track grades/feedback from `/dashboard` and `/sessions`.
+
+## Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — you'll be redirected to `/login`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Data & accounts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+On first load, the app seeds `localStorage` (key `flutter-mastery-db`) with demo data: 1 admin, 1 instructor, 15 students, 8 course sessions (with materials and assignments), and a handful of sample submissions. The logged-in user's session is stored under `flutter-mastery-session`.
 
-## Learn More
+All demo accounts use the password `FlutterMastery2026!`:
 
-To learn more about Next.js, take a look at the following resources:
+- `admin@fluttermastery.com`
+- `instructor@fluttermastery.com`
+- `ahmed.mohamed@fluttermastery.com`, `omar.hassan@fluttermastery.com`, ... (see `src/lib/seed-data.ts` for the full roster)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Everything you do — creating students, sessions, materials, uploading assignments, grading — is persisted to `localStorage` in the browser. Uploaded files are stored as base64 data URLs (max 8MB per assignment submission). Clearing your browser's site data (or using a different browser/device) resets the app back to the seeded demo data.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```
+src/
+  app/
+    login/                  Login page
+    (dashboard)/            Authenticated shell (sidebar, theme toggle)
+      dashboard/            Role-based overview (student progress / staff stats)
+      sessions/             Student: session list & detail (materials, assignment upload)
+      admin/
+        students/           Staff: manage students (CRUD, filters, progress)
+        sessions/           Staff: manage sessions, materials, assignments
+        submissions/        Staff: review submissions, grade & give feedback
+  components/                Shared UI (Sidebar, Topbar, ThemeToggle, ui primitives, admin widgets)
+  lib/
+    types.ts                 Local data model types (User, Session, Material, Submission)
+    seed-data.ts              Demo data seeded into localStorage on first run
+    store.tsx                 DataProvider/useData — localStorage-backed data layer
+    auth.tsx                  AuthProvider/useAuth — local session-based auth
+    utils.ts                  Formatting helpers
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Data model
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **users** — `id, name, email, password, phone, role (admin|instructor|student), createdAt`
+- **sessions** — `id, orderIndex, title, description, assignmentTitle, assignmentDescription, deadline`
+- **materials** — `id, sessionId, title, type (pdf|zip|doc|video|link), url, sizeBytes`
+- **submissions** — `id, studentId, sessionId, fileUrl, fileName, submittedAt, status (not_submitted|submitted|reviewed), feedback, grade, reviewedAt`
+
+## Features
+
+- Local email/password auth backed by localStorage, with client-side role-based route guards
+- Light/dark mode (next-themes)
+- Responsive sidebar layout (mobile drawer, desktop rail)
+- Drag-and-drop file uploads (materials & assignment submissions) stored as base64 data URLs
+- Student progress tracking, grade averages, and upcoming-deadline view
+- Staff dashboard with totals, completion rate, and recent submissions
+- Student management with search and filters (completed / missing tasks / grade)
+- Session & materials management (files + external links)
+- Submission review workflow with grading and feedback
