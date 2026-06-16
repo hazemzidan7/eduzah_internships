@@ -4,10 +4,14 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui";
 import { LogOut, User as UserIcon } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
+import { translations } from "@/lib/translations";
 import type { Profile } from "@/lib/types";
 
 export function UserMenu({ profile }: { profile: Profile }) {
   const router = useRouter();
+  const { language } = useLanguage();
+  const tr = translations[language];
 
   async function handleSignOut() {
     const supabase = createClient();
@@ -30,10 +34,10 @@ export function UserMenu({ profile }: { profile: Profile }) {
         </div>
         <div className="my-1 h-px bg-border" />
         <DropdownMenuItem>
-          <UserIcon size={15} /> {profile.role.charAt(0).toUpperCase() + profile.role.slice(1)} account
+          <UserIcon size={15} /> {tr.portal[profile.role]}
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={handleSignOut} className="text-danger">
-          <LogOut size={15} /> Sign out
+          <LogOut size={15} /> {tr.nav.signOut}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

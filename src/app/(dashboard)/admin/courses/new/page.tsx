@@ -16,7 +16,7 @@ const CATEGORIES = [
 export default function NewCoursePage() {
   return (
     <div>
-      <Topbar title="New Course" subtitle="Create a new course for the platform" />
+      <Topbar title="New Course" subtitle="Create a new course for the platform" titleAr="كورس جديد" subtitleAr="إنشاء كورس جديد للمنصة" />
       <div className="p-4 sm:p-6 lg:p-8">
         <Card className="mx-auto max-w-2xl">
           <form action={createCourse} className="space-y-4">

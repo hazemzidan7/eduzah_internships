@@ -39,7 +39,7 @@ export default async function InstructorProfilePage({ params }: { params: Promis
 
   return (
     <div>
-      <Topbar title={(instructor as Profile).name} subtitle="Instructor profile" />
+      <Topbar title={(instructor as Profile).name} subtitle="Instructor profile" subtitleAr="ملف المدرس" />
       <div className="space-y-6 p-4 sm:p-6 lg:p-8">
         <Link href="/admin/instructors" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/60 hover:text-foreground">
           <ChevronLeft size={16} /> Back to instructors

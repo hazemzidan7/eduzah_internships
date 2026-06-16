@@ -17,7 +17,7 @@ export default async function NotificationsPage() {
 
   return (
     <div>
-      <Topbar title="Notifications" subtitle="Stay up to date with your courses" />
+      <Topbar title="Notifications" subtitle="Stay up to date with your courses" titleAr="الإشعارات" subtitleAr="ابق على اطلاع بكورساتك" />
       <div className="p-4 sm:p-6 lg:p-8">
         <NotificationList notifications={(notifications ?? []) as Notification[]} />
       </div>

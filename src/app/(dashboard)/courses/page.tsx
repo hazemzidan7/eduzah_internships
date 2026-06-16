@@ -67,6 +67,8 @@ export default async function CoursesPage() {
       <Topbar
         title={role === "student" ? "My Courses" : role === "instructor" ? "My Courses" : "Courses"}
         subtitle={role === "admin" ? "Manage all courses on the platform" : "Browse your courses and materials"}
+        titleAr={role === "admin" ? "الكورسات" : "كورساتي"}
+        subtitleAr={role === "admin" ? "إدارة جميع الكورسات على المنصة" : "تصفح كورساتك ومواد التعلم"}
       />
       <div className="space-y-4 p-4 sm:p-6 lg:p-8">
         {role === "admin" && (

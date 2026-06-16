@@ -43,7 +43,7 @@ export default async function StudentProfilePage({ params }: { params: Promise<{
 
   return (
     <div>
-      <Topbar title={(student as Profile).name} subtitle="Student profile" />
+      <Topbar title={(student as Profile).name} subtitle="Student profile" subtitleAr="ملف الطالب" />
       <div className="space-y-6 p-4 sm:p-6 lg:p-8">
         <Link href="/admin/students" className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/60 hover:text-foreground">
           <ChevronLeft size={16} /> Back to students

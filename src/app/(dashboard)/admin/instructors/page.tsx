@@ -17,7 +17,7 @@ export default async function InstructorsPage() {
 
   return (
     <div>
-      <Topbar title="Instructors" subtitle="Manage instructor accounts and course assignments" />
+      <Topbar title="Instructors" subtitle="Manage instructor accounts and course assignments" titleAr="المدرسين" subtitleAr="إدارة حسابات المدرسين وتعيينات الكورسات" />
       <div className="p-4 sm:p-6 lg:p-8">
         <UserList users={(instructors ?? []) as Profile[]} role="instructor" label="Instructor" profilePathBase="/admin/instructors" metaMap={metaMap} />
       </div>

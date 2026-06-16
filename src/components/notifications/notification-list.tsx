@@ -7,11 +7,15 @@ import { createClient } from "@/lib/supabase/client";
 import { Card, Button, EmptyState } from "@/components/ui";
 import { formatDateTime } from "@/lib/utils";
 import { Bell, CheckCheck } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
+import { translations } from "@/lib/translations";
 import type { Notification } from "@/lib/types";
 
 export function NotificationList({ notifications }: { notifications: Notification[] }) {
   const router = useRouter();
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const { language } = useLanguage();
+  const tr = translations[language].notifications;
 
   const filtered = filter === "unread" ? notifications.filter((n) => !n.read) : notifications;
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -38,24 +42,24 @@ export function NotificationList({ notifications }: { notifications: Notificatio
             onClick={() => setFilter("all")}
             className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition ${filter === "all" ? "bg-primary text-primary-foreground" : "text-foreground/60"}`}
           >
-            All
+            {tr.all}
           </button>
           <button
             onClick={() => setFilter("unread")}
             className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition ${filter === "unread" ? "bg-primary text-primary-foreground" : "text-foreground/60"}`}
           >
-            Unread {unreadCount > 0 && `(${unreadCount})`}
+            {tr.unread} {unreadCount > 0 && `(${unreadCount})`}
           </button>
         </div>
         {unreadCount > 0 && (
           <Button variant="secondary" onClick={markAllRead}>
-            <CheckCheck size={15} /> Mark all read
+            <CheckCheck size={15} /> {tr.markAllRead}
           </Button>
         )}
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState icon={<Bell size={24} />} title="No notifications" description="You're all caught up!" />
+        <EmptyState icon={<Bell size={24} />} title={tr.noNotifications} description={tr.allCaughtUp} />
       ) : (
         <div className="space-y-2">
           {filtered.map((n) => (

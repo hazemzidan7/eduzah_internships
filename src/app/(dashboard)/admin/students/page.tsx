@@ -17,7 +17,7 @@ export default async function StudentsPage() {
 
   return (
     <div>
-      <Topbar title="Students" subtitle="Manage student accounts and enrollments" />
+      <Topbar title="Students" subtitle="Manage student accounts and enrollments" titleAr="الطلاب" subtitleAr="إدارة حسابات الطلاب والتسجيلات" />
       <div className="p-4 sm:p-6 lg:p-8">
         <UserList users={(students ?? []) as Profile[]} role="student" label="Student" profilePathBase="/admin/students" metaMap={metaMap} />
       </div>

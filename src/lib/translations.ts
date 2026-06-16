@@ -1,5 +1,23 @@
 export const translations = {
   en: {
+    pages: {
+      notifications: { title: "Notifications", subtitle: "Stay up to date with your courses" },
+      myCourses: { title: "My Courses", subtitle: "Browse your courses and materials" },
+      allCourses: { title: "Courses", subtitle: "Manage all courses on the platform" },
+      instructors: { title: "Instructors", subtitle: "Manage instructor accounts and course assignments" },
+      students: { title: "Students", subtitle: "Manage student accounts and enrollments" },
+      reports: { title: "Reports & Analytics", subtitle: "Platform-wide performance and completion metrics" },
+      newCourse: { title: "New Course", subtitle: "Create a new course for the platform" },
+      instructorProfile: "Instructor profile",
+      studentProfile: "Student profile",
+    },
+    notifications: {
+      all: "All",
+      unread: "Unread",
+      markAllRead: "Mark all read",
+      noNotifications: "No notifications",
+      allCaughtUp: "You're all caught up!",
+    },
     nav: {
       dashboard: "Dashboard",
       courses: "Courses",
@@ -71,6 +89,24 @@ export const translations = {
     },
   },
   ar: {
+    pages: {
+      notifications: { title: "الإشعارات", subtitle: "ابق على اطلاع بكورساتك" },
+      myCourses: { title: "كورساتي", subtitle: "تصفح كورساتك ومواد التعلم" },
+      allCourses: { title: "الكورسات", subtitle: "إدارة جميع الكورسات على المنصة" },
+      instructors: { title: "المدرسين", subtitle: "إدارة حسابات المدرسين وتعيينات الكورسات" },
+      students: { title: "الطلاب", subtitle: "إدارة حسابات الطلاب والتسجيلات" },
+      reports: { title: "التقارير والتحليلات", subtitle: "مقاييس الأداء والإتمام على مستوى المنصة" },
+      newCourse: { title: "كورس جديد", subtitle: "إنشاء كورس جديد للمنصة" },
+      instructorProfile: "ملف المدرس",
+      studentProfile: "ملف الطالب",
+    },
+    notifications: {
+      all: "الكل",
+      unread: "غير مقروء",
+      markAllRead: "تحديد الكل كمقروء",
+      noNotifications: "لا توجد إشعارات",
+      allCaughtUp: "أنت على اطلاع بكل شيء!",
+    },
     nav: {
       dashboard: "لوحة التحكم",
       courses: "الكورسات",
