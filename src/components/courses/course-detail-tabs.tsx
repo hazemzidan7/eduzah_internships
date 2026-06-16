@@ -16,10 +16,7 @@ import { updateCourse, assignInstructor, removeInstructor, enrollStudent, unenro
 import { Plus, Calendar, ClipboardList, Users, X, Pencil, FolderOpen, Trash2 } from "lucide-react";
 import type { Course, Session, Material, Attendance, Submission, Profile, UserRole, CourseStatus } from "@/lib/types";
 
-const CATEGORIES = [
-  "Flutter Development", "Front-End", "Full Stack", "Cyber Security",
-  "Networking", "English", "Graphic Design", "AI/ML",
-];
+const CATEGORIES = ["Technology", "Management", "English", "Kids"];
 
 export function CourseDetailTabs({
   course, role, sessions, materials, instructors, students,

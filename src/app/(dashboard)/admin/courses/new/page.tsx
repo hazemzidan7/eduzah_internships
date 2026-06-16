@@ -2,16 +2,7 @@ import { Topbar } from "@/components/topbar";
 import { Card, Input, Textarea, Select, Button } from "@/components/ui";
 import { createCourse } from "@/lib/actions/courses";
 
-const CATEGORIES = [
-  "Flutter Development",
-  "Front-End",
-  "Full Stack",
-  "Cyber Security",
-  "Networking",
-  "English",
-  "Graphic Design",
-  "AI/ML",
-];
+const CATEGORIES = ["Technology", "Management", "English", "Kids"];
 
 export default function NewCoursePage() {
   return (
