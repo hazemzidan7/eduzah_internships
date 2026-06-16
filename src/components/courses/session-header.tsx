@@ -34,7 +34,7 @@ export function SessionHeader({
       <Card className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-foreground">{session.title}</h1>
+            <h1 dir="auto" className="text-xl font-bold text-foreground">{session.title}</h1>
             <p className="mt-1 text-sm text-foreground/50">
               {session.session_date ? formatDate(session.session_date) : tr.noDateSet}
             </p>
@@ -53,7 +53,7 @@ export function SessionHeader({
             </div>
           )}
         </div>
-        {session.description && <p className="text-sm text-foreground/70">{session.description}</p>}
+        {session.description && <p dir="auto" className="text-sm text-foreground/70">{session.description}</p>}
         {session.recording_url && (
           <a href={session.recording_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
             <Video size={15} /> {tr.watchRecording}

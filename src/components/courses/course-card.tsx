@@ -39,11 +39,11 @@ export function CourseCard({
           <Badge>{course.category}</Badge>
           {showStatus && <CourseStatusBadge status={course.status} />}
         </div>
-        <h3 className="font-semibold text-foreground group-hover:text-primary">{course.title}</h3>
-        <p className="line-clamp-2 text-sm text-foreground/50">{course.description}</p>
+        <h3 dir="auto" className="font-semibold text-foreground group-hover:text-primary">{course.title}</h3>
+        <p dir="auto" className="line-clamp-2 text-sm text-foreground/50">{course.description}</p>
         <div className="mt-auto flex items-center gap-3 pt-2 text-xs text-foreground/50">
           {course.duration_text && (
-            <span className="flex items-center gap-1">
+            <span dir="auto" className="flex items-center gap-1">
               <Clock size={13} /> {course.duration_text}
             </span>
           )}

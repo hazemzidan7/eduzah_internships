@@ -52,15 +52,15 @@ export function CourseDetailTabs({
               <Badge>{course.category}</Badge>
               {role === "admin" && <CourseStatusBadge status={course.status} />}
             </div>
-            <p className="text-sm text-foreground/70">{course.description}</p>
-            {course.duration_text && <p className="text-xs text-foreground/50">{tr.duration}: {course.duration_text}</p>}
+            <p dir="auto" className="text-sm text-foreground/70">{course.description}</p>
+            {course.duration_text && <p className="text-xs text-foreground/50">{tr.duration}: <span dir="auto">{course.duration_text}</span></p>}
             {instructors.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 pt-1">
                 <span className="text-xs text-foreground/50">{tr.instructors}:</span>
                 {instructors.map((i) => (
                   <span key={i.id} className="flex items-center gap-1.5 rounded-full bg-surface-muted px-2 py-1 text-xs text-foreground/70">
                     <Avatar name={i.name} src={i.avatar_url} size={18} />
-                    {i.name}
+                    <span dir="auto">{i.name}</span>
                     {role === "admin" && (
                       <button onClick={() => removeInstructor(course.id, i.id)} className="text-foreground/40 hover:text-danger">
                         <X size={12} />
@@ -112,8 +112,8 @@ export function CourseDetailTabs({
                           {idx + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-foreground">{s.title}</p>
-                          <p className="text-sm text-foreground/50">
+                          <p dir="auto" className="font-medium text-foreground">{s.title}</p>
+                          <p dir="auto" className="text-sm text-foreground/50">
                             {s.session_date ? formatDate(s.session_date) : tr.noDateSet}
                             {s.assignment_title && <> · {s.assignment_title}</>}
                             {s.deadline && (
@@ -153,7 +153,7 @@ export function CourseDetailTabs({
                             <MaterialIcon type={m.type} />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-foreground">{m.title}</p>
+                            <p dir="auto" className="truncate text-sm font-medium text-foreground">{m.title}</p>
                             <p className="text-xs uppercase text-foreground/50">{m.type}</p>
                           </div>
                         </a>
