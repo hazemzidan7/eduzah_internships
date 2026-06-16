@@ -5,6 +5,8 @@ import { AdminDashboard } from "@/components/dashboard/admin-dashboard";
 import { isOverdue } from "@/lib/utils";
 import type { Course, Session, Submission, Profile, Notification } from "@/lib/types";
 
+export const revalidate = 30;
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -18,29 +20,23 @@ export default async function DashboardPage() {
     const { data: enrollments } = await supabase.from("enrollments").select("course_id").eq("student_id", user.id);
     const courseIds = (enrollments ?? []).map((e) => e.course_id);
 
-    const { data: courses } = courseIds.length
-      ? await supabase.from("courses").select("*").in("id", courseIds)
-      : { data: [] as Course[] };
+    const [coursesRes, sessionsRes, submissionsRes] = await Promise.all([
+      courseIds.length ? supabase.from("courses").select("*").in("id", courseIds) : Promise.resolve({ data: [] as Course[] }),
+      courseIds.length ? supabase.from("sessions").select("*").in("course_id", courseIds).order("order_index") : Promise.resolve({ data: [] as Session[] }),
+      supabase.from("submissions").select("*").eq("student_id", user.id),
+    ]);
 
-    const { data: sessions } = courseIds.length
-      ? await supabase.from("sessions").select("*").in("course_id", courseIds).order("order_index")
-      : { data: [] as Session[] };
-
-    const { data: submissions } = await supabase.from("submissions").select("*").eq("student_id", user.id);
-
-    const sessionList = (sessions ?? []) as Session[];
-    const subList = (submissions ?? []) as Submission[];
+    const sessionList = (sessionsRes.data ?? []) as Session[];
+    const subList = (submissionsRes.data ?? []) as Submission[];
     const subMap = new Map(subList.map((s) => [s.session_id, s]));
+    const courseMap = new Map(((coursesRes.data ?? []) as Course[]).map((c) => [c.id, c.title]));
 
     const total = sessionList.length;
     const reviewed = subList.filter((s) => s.status === "reviewed" || s.status === "approved").length;
     const submitted = subList.filter((s) => s.status === "submitted" || s.status === "late").length;
     const progress = total > 0 ? Math.round((reviewed / total) * 100) : 0;
-
     const grades = subList.filter((s) => s.grade !== null).map((s) => s.grade as number);
     const avgGrade = grades.length > 0 ? Math.round(grades.reduce((a, b) => a + b, 0) / grades.length) : null;
-
-    const courseMap = new Map(((courses ?? []) as Course[]).map((c) => [c.id, c.title]));
 
     const upcoming = sessionList
       .filter((s) => {
@@ -53,7 +49,7 @@ export default async function DashboardPage() {
     return (
       <StudentDashboard
         firstName={firstName}
-        courses={(courses ?? []) as Course[]}
+        courses={(coursesRes.data ?? []) as Course[]}
         sessionList={sessionList}
         subList={subList}
         subMap={subMap}
@@ -72,23 +68,17 @@ export default async function DashboardPage() {
     const { data: assignments } = await supabase.from("course_instructors").select("course_id").eq("instructor_id", user.id);
     const courseIds = (assignments ?? []).map((a) => a.course_id);
 
-    const { data: courses } = courseIds.length
-      ? await supabase.from("courses").select("*").in("id", courseIds)
-      : { data: [] as Course[] };
+    const [coursesRes, sessionsRes, enrollmentsRes] = await Promise.all([
+      courseIds.length ? supabase.from("courses").select("*").in("id", courseIds) : Promise.resolve({ data: [] as Course[] }),
+      courseIds.length ? supabase.from("sessions").select("*").in("course_id", courseIds) : Promise.resolve({ data: [] as Session[] }),
+      courseIds.length ? supabase.from("enrollments").select("student_id").in("course_id", courseIds) : Promise.resolve({ data: [] }),
+    ]);
 
-    const { data: sessions } = courseIds.length
-      ? await supabase.from("sessions").select("*").in("course_id", courseIds)
-      : { data: [] as Session[] };
-
-    const sessionList = (sessions ?? []) as Session[];
+    const sessionList = (sessionsRes.data ?? []) as Session[];
     const sessionIds = sessionList.map((s) => s.id);
     const sessionMap = new Map(sessionList.map((s) => [s.id, s]));
-    const courseMap = new Map(((courses ?? []) as Course[]).map((c) => [c.id, c.title]));
-
-    const { data: enrollments } = courseIds.length
-      ? await supabase.from("enrollments").select("student_id").in("course_id", courseIds)
-      : { data: [] };
-    const totalStudents = new Set((enrollments ?? []).map((e) => e.student_id)).size;
+    const courseMap = new Map(((coursesRes.data ?? []) as Course[]).map((c) => [c.id, c.title]));
+    const totalStudents = new Set((enrollmentsRes.data ?? []).map((e) => e.student_id)).size;
 
     const { data: submissions } = sessionIds.length
       ? await supabase.from("submissions").select("*").in("session_id", sessionIds)
@@ -110,7 +100,7 @@ export default async function DashboardPage() {
     return (
       <InstructorDashboard
         firstName={firstName}
-        courses={(courses ?? []) as Course[]}
+        courses={(coursesRes.data ?? []) as Course[]}
         sessionList={sessionList}
         totalStudents={totalStudents}
         pendingReview={pendingReview}
@@ -122,18 +112,30 @@ export default async function DashboardPage() {
     );
   }
 
-  // Admin
-  const { data: courses } = await supabase.from("courses").select("*");
-  const courseList = (courses ?? []) as Course[];
+  // Admin — all queries in parallel
+  const [
+    coursesRes,
+    studentCountRes,
+    instructorCountRes,
+    enrollmentsRes,
+    attendanceRes,
+    submissionsRes,
+    notificationsRes,
+  ] = await Promise.all([
+    supabase.from("courses").select("*"),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "student"),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "instructor"),
+    supabase.from("enrollments").select("course_id"),
+    supabase.from("attendance").select("status"),
+    supabase.from("submissions").select("status, grade"),
+    supabase.from("notifications").select("*").order("created_at", { ascending: false }).limit(6),
+  ]);
 
-  const { count: studentCount } = await supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "student");
-  const { count: instructorCount } = await supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "instructor");
-
-  const { data: enrollments } = await supabase.from("enrollments").select("course_id");
+  const courseList = (coursesRes.data ?? []) as Course[];
   const courseMap = new Map(courseList.map((c) => [c.id, c]));
 
   const categoryCounts = new Map<string, number>();
-  (enrollments ?? []).forEach((e) => {
+  (enrollmentsRes.data ?? []).forEach((e) => {
     const course = courseMap.get(e.course_id);
     if (!course) return;
     categoryCounts.set(course.category, (categoryCounts.get(course.category) ?? 0) + 1);
@@ -148,34 +150,26 @@ export default async function DashboardPage() {
     { name: "Archived", value: statusCounts.archived },
   ].filter((d) => d.value > 0);
 
-  const { data: attendanceRows } = await supabase.from("attendance").select("status");
   const attCounts = { present: 0, absent: 0, late: 0 };
-  (attendanceRows ?? []).forEach((a) => { attCounts[a.status as keyof typeof attCounts]++; });
+  (attendanceRes.data ?? []).forEach((a) => { attCounts[a.status as keyof typeof attCounts]++; });
   const attendanceData = [
     { name: "Present", value: attCounts.present },
     { name: "Absent", value: attCounts.absent },
     { name: "Late", value: attCounts.late },
   ].filter((d) => d.value > 0);
 
-  const { data: submissions } = await supabase.from("submissions").select("*");
-  const subList = (submissions ?? []) as Submission[];
-  const submittedCount = subList.filter((s) => s.status === "submitted" || s.status === "late" || s.status === "reviewed" || s.status === "approved").length;
+  const subList = (submissionsRes.data ?? []) as { status: string; grade: number | null }[];
+  const submittedCount = subList.filter((s) => ["submitted", "late", "reviewed", "approved"].includes(s.status)).length;
   const pendingReview = subList.filter((s) => s.status === "submitted" || s.status === "late").length;
   const reviewedCount = subList.filter((s) => s.status === "reviewed" || s.status === "approved").length;
   const completionRate = submittedCount > 0 ? Math.round((reviewedCount / submittedCount) * 100) : 0;
-
-  const { data: recentNotifications } = await supabase
-    .from("notifications")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(6);
 
   return (
     <AdminDashboard
       firstName={firstName}
       courseCount={courseList.length}
-      studentCount={studentCount ?? 0}
-      instructorCount={instructorCount ?? 0}
+      studentCount={studentCountRes.count ?? 0}
+      instructorCount={instructorCountRes.count ?? 0}
       pendingReview={pendingReview}
       submittedCount={submittedCount}
       reviewedCount={reviewedCount}
@@ -183,7 +177,7 @@ export default async function DashboardPage() {
       courseStatusData={courseStatusData}
       enrollmentsByCategory={enrollmentsByCategory}
       attendanceData={attendanceData}
-      recentNotifications={(recentNotifications ?? []) as Notification[]}
+      recentNotifications={(notificationsRes.data ?? []) as Notification[]}
     />
   );
 }
