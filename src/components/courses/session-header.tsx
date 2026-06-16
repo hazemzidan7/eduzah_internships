@@ -7,6 +7,8 @@ import { MaterialIcon } from "@/components/material-icon";
 import { AddMaterialDialog } from "@/components/courses/add-material-dialog";
 import { updateSession, deleteSession, deleteMaterial } from "@/lib/actions/sessions";
 import { formatDate, isOverdue } from "@/lib/utils";
+import { useLanguage } from "@/lib/language-context";
+import { translations } from "@/lib/translations";
 import { ChevronLeft, Pencil, Trash2, Plus, X, Video, FolderOpen, ClipboardList } from "lucide-react";
 import type { Session, Material } from "@/lib/types";
 
@@ -20,11 +22,13 @@ export function SessionHeader({
   canManage: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
+  const { language } = useLanguage();
+  const tr = translations[language].session;
 
   return (
     <>
       <Link href={`/courses/${courseId}`} className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/60 hover:text-foreground">
-        <ChevronLeft size={16} /> Back to course
+        <ChevronLeft size={16} /> {tr.backToCourse}
       </Link>
 
       <Card className="space-y-3">
@@ -32,16 +36,16 @@ export function SessionHeader({
           <div>
             <h1 className="text-xl font-bold text-foreground">{session.title}</h1>
             <p className="mt-1 text-sm text-foreground/50">
-              {session.session_date ? formatDate(session.session_date) : "No date set"}
+              {session.session_date ? formatDate(session.session_date) : tr.noDateSet}
             </p>
           </div>
           {canManage && (
             <div className="flex shrink-0 gap-2">
-              <Button variant="secondary" onClick={() => setEditOpen(true)}><Pencil size={15} /> Edit</Button>
+              <Button variant="secondary" onClick={() => setEditOpen(true)}><Pencil size={15} /> {translations[language].courseDetail.edit}</Button>
               <Button
                 variant="danger"
                 onClick={() => {
-                  if (confirm("Delete this session? This cannot be undone.")) deleteSession(courseId, session.id);
+                  if (confirm(tr.deleteConfirm)) deleteSession(courseId, session.id);
                 }}
               >
                 <Trash2 size={15} />
@@ -52,7 +56,7 @@ export function SessionHeader({
         {session.description && <p className="text-sm text-foreground/70">{session.description}</p>}
         {session.recording_url && (
           <a href={session.recording_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline">
-            <Video size={15} /> Watch recording
+            <Video size={15} /> {tr.watchRecording}
           </a>
         )}
         {session.assignment_title && (
@@ -63,15 +67,15 @@ export function SessionHeader({
             {session.assignment_description && <p className="mt-1 text-sm text-foreground/60">{session.assignment_description}</p>}
             {session.deadline && (
               <p className="mt-1 text-xs text-foreground/50">
-                Due {formatDate(session.deadline)}
-                {isOverdue(session.deadline) && <span className="ml-2 font-semibold text-danger">Overdue</span>}
+                {tr.due} {formatDate(session.deadline)}
+                {isOverdue(session.deadline) && <span className="ml-2 font-semibold text-danger">{tr.overdue}</span>}
               </p>
             )}
           </div>
         )}
       </Card>
 
-      <Dialog open={editOpen} onOpenChange={setEditOpen} title="Edit Session">
+      <Dialog open={editOpen} onOpenChange={setEditOpen} title={tr.editSession}>
         <form
           action={async (formData) => {
             await updateSession(courseId, session.id, formData);
@@ -80,37 +84,37 @@ export function SessionHeader({
           className="space-y-3"
         >
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Title</label>
+            <label className="text-sm font-medium text-foreground">{tr.formTitle}</label>
             <Input name="title" required defaultValue={session.title} />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Description</label>
+            <label className="text-sm font-medium text-foreground">{tr.formDesc}</label>
             <Textarea name="description" rows={3} defaultValue={session.description} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Session date</label>
+              <label className="text-sm font-medium text-foreground">{tr.formSessionDate}</label>
               <Input type="date" name="session_date" defaultValue={session.session_date ?? ""} />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-foreground">Deadline</label>
+              <label className="text-sm font-medium text-foreground">{tr.formDeadline}</label>
               <Input type="date" name="deadline" defaultValue={session.deadline ?? ""} />
             </div>
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Recording URL</label>
+            <label className="text-sm font-medium text-foreground">{tr.formRecordingUrl}</label>
             <Input name="recording_url" defaultValue={session.recording_url ?? ""} />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Assignment title</label>
+            <label className="text-sm font-medium text-foreground">{tr.formAssignmentTitle}</label>
             <Input name="assignment_title" defaultValue={session.assignment_title ?? ""} />
           </div>
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-foreground">Assignment description</label>
+            <label className="text-sm font-medium text-foreground">{tr.formAssignmentDesc}</label>
             <Textarea name="assignment_description" rows={2} defaultValue={session.assignment_description ?? ""} />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit">{tr.saveChanges}</Button>
           </div>
         </form>
       </Dialog>
@@ -130,18 +134,20 @@ export function MaterialsList({
   canManage: boolean;
 }) {
   const [addOpen, setAddOpen] = useState(false);
+  const { language } = useLanguage();
+  const tr = translations[language].materials;
 
   return (
     <Card className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-foreground">Materials</h2>
+        <h2 className="font-semibold text-foreground">{tr.title}</h2>
         {canManage && (
-          <Button variant="secondary" onClick={() => setAddOpen(true)}><Plus size={15} /> Add</Button>
+          <Button variant="secondary" onClick={() => setAddOpen(true)}><Plus size={15} /> {tr.add}</Button>
         )}
       </div>
 
       {materials.length === 0 ? (
-        <EmptyState icon={<FolderOpen size={24} />} title="No materials yet" description="Materials for this session will appear here." />
+        <EmptyState icon={<FolderOpen size={24} />} title={tr.noMaterials} description={tr.materialsDesc} />
       ) : (
         <div className="space-y-2">
           {materials.map((m) => (

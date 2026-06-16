@@ -1,9 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Topbar } from "@/components/topbar";
-import { Card, StatCard, ProgressBar } from "@/components/ui";
-import { CompletionByCourseChart, AttendanceOverviewChart } from "@/components/dashboard/admin-charts";
-import { ReportsExport } from "@/components/admin/reports-export";
-import { TrendingUp, CheckCircle2, Users, Layers } from "lucide-react";
+import { ReportsContent } from "@/components/admin/reports-content";
 import type { Course, Session, Submission, Attendance, Profile, Enrollment } from "@/lib/types";
 
 export default async function ReportsPage() {
@@ -86,29 +83,17 @@ export default async function ReportsPage() {
   return (
     <div>
       <Topbar title="Reports & Analytics" subtitle="Platform-wide performance and completion metrics" titleAr="التقارير والتحليلات" subtitleAr="مقاييس الأداء والإتمام على مستوى المنصة" />
-      <div className="space-y-6 p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Avg Completion Rate" value={`${overallCompletion}%`} icon={<CheckCircle2 size={22} />} accent="bg-success/10 text-success" />
-          <StatCard label="Avg Grade" value={`${avgGrade}%`} icon={<TrendingUp size={22} />} accent="bg-primary-soft text-primary" />
-          <StatCard label="Attendance Rate" value={`${overallAttendanceRate}%`} icon={<Users size={22} />} />
-          <StatCard label="Total Courses" value={courseList.length} icon={<Layers size={22} />} />
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <CompletionByCourseChart data={completionByCourse.length ? completionByCourse : [{ name: "No data", value: 0 }]} />
-          <AttendanceOverviewChart data={attendanceData.length ? attendanceData : [{ name: "No records", value: 1 }]} />
-        </div>
-
-        <Card>
-          <h2 className="mb-2 font-semibold text-foreground">Overall Completion</h2>
-          <ProgressBar value={overallCompletion} />
-        </Card>
-
-        <div>
-          <h2 className="mb-3 font-semibold text-foreground">Export Data</h2>
-          <ReportsExport students={studentRows} attendance={attendanceRows} grades={gradeRows} />
-        </div>
-      </div>
+      <ReportsContent
+        overallCompletion={overallCompletion}
+        avgGrade={avgGrade}
+        overallAttendanceRate={overallAttendanceRate}
+        totalCourses={courseList.length}
+        completionByCourse={completionByCourse}
+        attendanceData={attendanceData}
+        studentRows={studentRows}
+        attendanceRows={attendanceRows}
+        gradeRows={gradeRows}
+      />
     </div>
   );
 }

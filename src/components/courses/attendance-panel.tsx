@@ -3,15 +3,11 @@
 import { useState, useTransition } from "react";
 import { Card, Avatar, EmptyState } from "@/components/ui";
 import { markAttendance } from "@/lib/actions/attendance";
+import { useLanguage } from "@/lib/language-context";
+import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { Users } from "lucide-react";
 import type { Attendance, AttendanceStatus, Profile } from "@/lib/types";
-
-const OPTIONS: { value: AttendanceStatus; label: string; active: string }[] = [
-  { value: "present", label: "Present", active: "bg-success text-white" },
-  { value: "late", label: "Late", active: "bg-warning text-white" },
-  { value: "absent", label: "Absent", active: "bg-danger text-white" },
-];
 
 export function AttendancePanel({
   courseId,
@@ -26,9 +22,17 @@ export function AttendancePanel({
 }) {
   const [records, setRecords] = useState(new Map(attendance.map((a) => [a.student_id, a.status])));
   const [, startTransition] = useTransition();
+  const { language } = useLanguage();
+  const tr = translations[language].attendance;
+
+  const OPTIONS: { value: AttendanceStatus; label: string; active: string }[] = [
+    { value: "present", label: tr.present, active: "bg-success text-white" },
+    { value: "late", label: tr.late, active: "bg-warning text-white" },
+    { value: "absent", label: tr.absent, active: "bg-danger text-white" },
+  ];
 
   if (students.length === 0) {
-    return <EmptyState icon={<Users size={24} />} title="No students enrolled" description="Enroll students to take attendance." />;
+    return <EmptyState icon={<Users size={24} />} title={tr.noStudents} description={tr.enrollToAttend} />;
   }
 
   function setStatus(studentId: string, status: AttendanceStatus) {
@@ -40,7 +44,7 @@ export function AttendancePanel({
 
   return (
     <Card className="space-y-3">
-      <h2 className="font-semibold text-foreground">Attendance</h2>
+      <h2 className="font-semibold text-foreground">{tr.title}</h2>
       <div className="space-y-2">
         {students.map((st) => {
           const current = records.get(st.id);
