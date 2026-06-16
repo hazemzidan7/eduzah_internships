@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageToggle } from "@/components/language-toggle";
 import { GlobalSearch } from "@/components/global-search";
 import { NotificationBell } from "@/components/notification-bell";
 import { UserMenu } from "@/components/user-menu";
@@ -22,6 +23,7 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <LanguageToggle />
           <ThemeToggle />
           <NotificationBell notifications={notifications} />
           <UserMenu profile={profile} />
