@@ -38,10 +38,13 @@ export function NewCourseForm() {
         const supabase = createClient();
         const path = `banners/${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
         const { error: uploadError } = await supabase.storage.from("course-banners").upload(path, file);
-        if (!uploadError) {
-          const { data } = supabase.storage.from("course-banners").getPublicUrl(path);
-          formData.set("banner_url", data.publicUrl);
+        if (uploadError) {
+          setError(`Image upload failed: ${uploadError.message}`);
+          setLoading(false);
+          return;
         }
+        const { data } = supabase.storage.from("course-banners").getPublicUrl(path);
+        formData.set("banner_url", data.publicUrl);
       }
       await createCourse(formData);
     } catch (e) {
