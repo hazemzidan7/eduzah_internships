@@ -110,6 +110,22 @@ export default function LoginPage() {
         <p className="mt-6 text-center text-xs text-foreground/50">
           Accounts are created by your administrator.
         </p>
+
+        {/* Apply CTA */}
+        <div className="mt-4 rounded-2xl border border-border bg-surface p-5 text-center space-y-3">
+          <p className="text-sm font-medium text-foreground">
+            🎓 Interested in joining EDUZAH?
+          </p>
+          <p className="text-xs text-foreground/60">
+            Apply for our Internship & Team program — students and fresh graduates welcome.
+          </p>
+          <Link
+            href="/apply"
+            className="brand-gradient inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md shadow-accent/20 transition hover:opacity-90"
+          >
+            Apply Now →
+          </Link>
+        </div>
       </div>
     </div>
   );
