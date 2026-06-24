@@ -474,16 +474,18 @@ export function ApplyForm() {
           </div>
 
           {/* Photo side — full image visible */}
-          <div className="sm:w-72 lg:w-80 flex-shrink-0 flex items-center justify-center px-4 pb-6 sm:py-6 sm:pr-6">
+          <div className="sm:w-64 md:w-72 lg:w-80 flex-shrink-0 flex items-center justify-center px-4 pb-6 sm:py-5 sm:pr-6">
             <img
               key={imgIndex}
               src={HEADER_IMAGES[imgIndex]}
               alt="EDUZAH Team"
-              className="rounded-2xl shadow-xl transition-opacity duration-700 w-full"
+              className="rounded-2xl shadow-2xl transition-opacity duration-700"
               style={{
                 opacity: imgVisible ? 1 : 0,
-                maxHeight: 380,
+                width: "100%",
+                maxHeight: 360,
                 objectFit: "contain",
+                display: "block",
               }}
             />
           </div>
