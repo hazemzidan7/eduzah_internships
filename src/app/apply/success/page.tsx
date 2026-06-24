@@ -11,7 +11,7 @@ export default function ApplySuccessPage() {
         {/* Animated checkmark */}
         <div
           className="mx-auto w-24 h-24 rounded-full flex items-center justify-center text-5xl"
-          style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}
+          style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}
         >
           🎉
         </div>
@@ -21,7 +21,7 @@ export default function ApplySuccessPage() {
             Application Submitted Successfully!
           </h1>
           <p className="text-gray-500 leading-relaxed">
-            Thank you for applying to <span className="font-semibold text-[#6C3BFF]">EDUZAH</span>.
+            Thank you for applying to <span className="font-semibold text-[#d91b5b]">EDUZAH</span>.
             <br />
             Our team will review your application and contact shortlisted candidates.
           </p>
@@ -52,7 +52,7 @@ export default function ApplySuccessPage() {
           <Link
             href="/apply"
             className="px-6 py-2.5 rounded-xl text-white text-sm font-medium transition"
-            style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}
+            style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}
           >
             Submit Another Application
           </Link>
@@ -62,11 +62,11 @@ export default function ApplySuccessPage() {
       {/* Contact */}
       <p className="mt-8 text-sm text-gray-400">
         Questions? Call us:{" "}
-        <a href="tel:01044222881" className="text-[#6C3BFF] font-medium">
+        <a href="tel:01044222881" className="text-[#d91b5b] font-medium">
           01044222881
         </a>{" "}
         /{" "}
-        <a href="tel:01146966811" className="text-[#6C3BFF] font-medium">
+        <a href="tel:01146966811" className="text-[#d91b5b] font-medium">
           01146966811
         </a>
       </p>

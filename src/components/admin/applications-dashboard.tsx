@@ -188,7 +188,7 @@ export function ApplicationsDashboard({
             href="/apply"
             target="_blank"
             className="px-4 py-2 text-sm rounded-xl text-white font-medium transition hover:opacity-90"
-            style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}
+            style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}
           >
             🔗 View Form
           </a>
@@ -198,7 +198,7 @@ export function ApplicationsDashboard({
       {/* ── Stats Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
-          { label: "Total", value: stats.total, color: "#6C3BFF" },
+          { label: "Total", value: stats.total, color: "#d91b5b" },
           { label: "Internships", value: stats.totalInternships, color: "#8B5CF6" },
           { label: "Paid", value: stats.totalPaid, color: "#10B981" },
           { label: "Pending", value: stats.pending, color: "#F59E0B" },
@@ -331,7 +331,7 @@ export function ApplicationsDashboard({
                       <td className="px-4 py-3">
                         <button
                           onClick={() => setSelected(app)}
-                          className="text-xs text-[#6C3BFF] font-medium hover:underline"
+                          className="text-xs text-[#d91b5b] font-medium hover:underline"
                         >
                           View
                         </button>
@@ -386,7 +386,7 @@ export function ApplicationsDashboard({
                   onChange={(e) => setStatusNote(e.target.value)}
                   placeholder="Admin notes (optional)..."
                   rows={2}
-                  className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 resize-none focus:outline-none focus:ring-1 focus:ring-[#6C3BFF]/40"
+                  className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 resize-none focus:outline-none focus:ring-1 focus:ring-[#d91b5b]/40"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export function ApplicationsDashboard({
                 <div className="flex flex-wrap gap-2">
                   <a href={selected.cv_url} target="_blank" rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white"
-                    style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}>
+                    style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}>
                     📄 View CV
                   </a>
                   {selected.portfolio_link && <ExtLink href={selected.portfolio_link} label="Portfolio" />}
@@ -505,7 +505,7 @@ function FilterSelect({ value, onChange, placeholder, options }: { value: string
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#6C3BFF]/40"
+      className="w-full px-3 py-2 text-xs rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#d91b5b]/40"
     >
       <option value="">{placeholder}</option>
       {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -535,7 +535,7 @@ function RowLink({ label, href }: { label: string; href: string }) {
   return (
     <div className="flex items-start gap-2 text-xs">
       <span className="text-gray-400 min-w-[120px] flex-shrink-0">{label}</span>
-      <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#6C3BFF] font-medium hover:underline truncate">{href}</a>
+      <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#d91b5b] font-medium hover:underline truncate">{href}</a>
     </div>
   );
 }
@@ -574,7 +574,7 @@ function StatsCard({ title, data }: { title: string; data: Record<string, number
             <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
-                style={{ width: `${(count / max) * 100}%`, background: "linear-gradient(90deg,#6C3BFF,#A855F7)" }}
+                style={{ width: `${(count / max) * 100}%`, background: "linear-gradient(90deg,#d91b5b,#faa633)" }}
               />
             </div>
           </div>

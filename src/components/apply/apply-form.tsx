@@ -212,7 +212,7 @@ function Input({ value, onChange, placeholder, type = "text" }: {
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6C3BFF]/40 focus:border-[#6C3BFF] transition text-sm"
+      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d91b5b]/40 focus:border-[#d91b5b] transition text-sm"
     />
   );
 }
@@ -225,7 +225,7 @@ function Select({ value, onChange, options, placeholder }: {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#6C3BFF]/40 focus:border-[#6C3BFF] transition text-sm"
+      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#d91b5b]/40 focus:border-[#d91b5b] transition text-sm"
     >
       {placeholder && <option value="">{placeholder}</option>}
       {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
@@ -242,7 +242,7 @@ function Textarea({ value, onChange, placeholder, rows = 4 }: {
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6C3BFF]/40 focus:border-[#6C3BFF] transition text-sm resize-none"
+      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d91b5b]/40 focus:border-[#d91b5b] transition text-sm resize-none"
     />
   );
 }
@@ -258,9 +258,9 @@ function RatingSelector({ value, onChange }: { value: string; onChange: (v: stri
           className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
             value === opt
               ? "text-white border-transparent"
-              : "border-gray-200 text-gray-600 hover:border-[#6C3BFF]/40"
+              : "border-gray-200 text-gray-600 hover:border-[#d91b5b]/40"
           }`}
-          style={value === opt ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}
+          style={value === opt ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}
         >
           {opt}
         </button>
@@ -412,7 +412,7 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="py-8 px-4" style={{ background: "linear-gradient(135deg, #6C3BFF 0%, #A855F7 100%)" }}>
+      <header className="py-8 px-4" style={{ background: "linear-gradient(135deg, #321d3d 0%, #672d86 100%)" }}>
         <div className="max-w-3xl mx-auto">
           <div className="mb-4">
             <Logo height={36} />
@@ -428,8 +428,8 @@ export function ApplyForm() {
 
       {/* Draft Banner */}
       {hasDraft && step === 1 && (
-        <div className="bg-[#6C3BFF]/10 border-b border-[#6C3BFF]/20">
-          <div className="max-w-3xl mx-auto px-4 py-2 flex items-center gap-2 text-sm text-[#6C3BFF]">
+        <div className="bg-[#d91b5b]/10 border-b border-[#d91b5b]/20">
+          <div className="max-w-3xl mx-auto px-4 py-2 flex items-center gap-2 text-sm text-[#d91b5b]">
             <span>Draft restored — your previous progress has been loaded.</span>
             <button
               onClick={() => { setData(INITIAL); localStorage.removeItem(STORAGE_KEY); setHasDraft(false); }}
@@ -447,13 +447,13 @@ export function ApplyForm() {
           {/* Mobile */}
           <div className="sm:hidden space-y-1.5">
             <div className="flex justify-between text-xs text-gray-500">
-              <span className="font-semibold text-[#6C3BFF]">Step {step} of {TOTAL_STEPS}</span>
+              <span className="font-semibold text-[#d91b5b]">Step {step} of {TOTAL_STEPS}</span>
               <span>{STEP_NAMES[step - 1]}</span>
             </div>
             <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${(step / TOTAL_STEPS) * 100}%`, background: "linear-gradient(90deg,#6C3BFF,#A855F7)" }}
+                style={{ width: `${(step / TOTAL_STEPS) * 100}%`, background: "linear-gradient(90deg,#d91b5b,#672d86)" }}
               />
             </div>
           </div>
@@ -469,17 +469,17 @@ export function ApplyForm() {
                     <div
                       className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                         done || active ? "text-white" : "bg-gray-100 text-gray-400"
-                      } ${active ? "ring-2 ring-[#6C3BFF]/30" : ""}`}
-                      style={done || active ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}
+                      } ${active ? "ring-2 ring-[#d91b5b]/30" : ""}`}
+                      style={done || active ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}
                     >
                       {done ? "✓" : n}
                     </div>
-                    <span className={`text-[10px] mt-0.5 font-medium ${active ? "text-[#6C3BFF]" : "text-gray-400"}`}>
+                    <span className={`text-[10px] mt-0.5 font-medium ${active ? "text-[#d91b5b]" : "text-gray-400"}`}>
                       {name}
                     </span>
                   </div>
                   {n < TOTAL_STEPS && (
-                    <div className={`w-6 h-0.5 mb-3 rounded-full flex-shrink-0 ${done ? "bg-[#6C3BFF]" : "bg-gray-200"}`} />
+                    <div className={`w-6 h-0.5 mb-3 rounded-full flex-shrink-0 ${done ? "bg-[#d91b5b]" : "bg-gray-200"}`} />
                   )}
                 </div>
               );
@@ -500,7 +500,7 @@ export function ApplyForm() {
           >
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
               <div className="border-b border-gray-100 pb-4">
-                <p className="text-xs font-semibold uppercase tracking-widest text-[#6C3BFF] mb-1">
+                <p className="text-xs font-semibold uppercase tracking-widest text-[#d91b5b] mb-1">
                   Step {step} of {TOTAL_STEPS}
                 </p>
                 <h2 className="text-xl font-bold text-gray-900">{STEP_NAMES[step - 1]}</h2>
@@ -595,7 +595,7 @@ export function ApplyForm() {
                   <PositionGroup
                     title="Technical Internships"
                     badge="Internship — Unpaid"
-                    badgeColor="#6C3BFF"
+                    badgeColor="#d91b5b"
                     positions={POSITIONS.filter((p) => p.type === "technical_internship")}
                     selected={data.position}
                     onSelect={(pos) => { update("position", pos.name); update("positionType", pos.type); update("skills", {}); }}
@@ -603,7 +603,7 @@ export function ApplyForm() {
                   <PositionGroup
                     title="Non-Technical Internships"
                     badge="Internship — Unpaid"
-                    badgeColor="#6C3BFF"
+                    badgeColor="#d91b5b"
                     positions={POSITIONS.filter((p) => p.type === "non_technical_internship")}
                     selected={data.position}
                     onSelect={(pos) => { update("position", pos.name); update("positionType", pos.type); update("skills", {}); }}
@@ -623,7 +623,7 @@ export function ApplyForm() {
               {step === 4 && (
                 <div className="space-y-5">
                   {data.position && (
-                    <div className="p-3 rounded-xl border border-[#6C3BFF]/20" style={{ background: "#F8F7FF" }}>
+                    <div className="p-3 rounded-xl border border-[#d91b5b]/20" style={{ background: "#F8F7FF" }}>
                       <p className="font-semibold text-gray-900">{data.position}</p>
                       <p className="text-xs text-gray-500 mt-0.5">Fill in your skill level for each area</p>
                     </div>
@@ -660,7 +660,7 @@ export function ApplyForm() {
                           className={`px-6 py-2.5 rounded-xl border font-medium text-sm transition ${
                             data.hasExperience === opt ? "text-white border-transparent" : "border-gray-200 text-gray-600"
                           }`}
-                          style={data.hasExperience === opt ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}>
+                          style={data.hasExperience === opt ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}>
                           {opt === "yes" ? "Yes" : "No"}
                         </button>
                       ))}
@@ -695,7 +695,7 @@ export function ApplyForm() {
                         </div>
                       ))}
                       <button type="button" onClick={addExperience}
-                        className="w-full py-2.5 rounded-xl border-2 border-dashed border-[#6C3BFF]/30 text-[#6C3BFF] text-sm font-medium hover:border-[#6C3BFF]/60 transition">
+                        className="w-full py-2.5 rounded-xl border-2 border-dashed border-[#d91b5b]/30 text-[#d91b5b] text-sm font-medium hover:border-[#d91b5b]/60 transition">
                         + Add Experience
                       </button>
                     </div>
@@ -710,18 +710,18 @@ export function ApplyForm() {
                     <div
                       onClick={() => fileRef.current?.click()}
                       className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
-                        data.cvUrl ? "border-[#6C3BFF]/40 bg-[#6C3BFF]/5" : "border-gray-200 hover:border-[#6C3BFF]/40"
+                        data.cvUrl ? "border-[#d91b5b]/40 bg-[#d91b5b]/5" : "border-gray-200 hover:border-[#d91b5b]/40"
                       }`}
                     >
                       <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={handleCvChange} />
                       {cvUploading ? (
                         <div className="space-y-2">
-                          <div className="w-8 h-8 border-2 border-[#6C3BFF] border-t-transparent rounded-full animate-spin mx-auto" />
+                          <div className="w-8 h-8 border-2 border-[#d91b5b] border-t-transparent rounded-full animate-spin mx-auto" />
                           <p className="text-sm text-gray-500">Uploading...</p>
                         </div>
                       ) : data.cvUrl ? (
                         <div className="space-y-1">
-                          <p className="font-medium text-[#6C3BFF] text-sm">{data.cvFilename || "CV uploaded"}</p>
+                          <p className="font-medium text-[#d91b5b] text-sm">{data.cvFilename || "CV uploaded"}</p>
                           <p className="text-xs text-gray-400">Click to replace</p>
                         </div>
                       ) : (
@@ -759,7 +759,7 @@ export function ApplyForm() {
                           className={`px-4 py-2 rounded-xl border text-sm font-medium transition ${
                             data.hoursPerWeek === h ? "text-white border-transparent" : "border-gray-200 text-gray-600"
                           }`}
-                          style={data.hoursPerWeek === h ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}>
+                          style={data.hoursPerWeek === h ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}>
                           {h}
                         </button>
                       ))}
@@ -778,7 +778,7 @@ export function ApplyForm() {
                           className={`px-4 py-2 rounded-xl border text-sm font-medium transition ${
                             data.preferredDays.includes(day) ? "text-white border-transparent" : "border-gray-200 text-gray-600"
                           }`}
-                          style={data.preferredDays.includes(day) ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}>
+                          style={data.preferredDays.includes(day) ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}>
                           {day}
                         </button>
                       ))}
@@ -797,7 +797,7 @@ export function ApplyForm() {
                               className={`px-5 py-2 rounded-xl border text-sm font-medium transition ${
                                 (data as unknown as Record<string, string>)[field] === opt ? "text-white border-transparent" : "border-gray-200 text-gray-600"
                               }`}
-                              style={(data as unknown as Record<string, string>)[field] === opt ? { background: "linear-gradient(135deg,#6C3BFF,#A855F7)" } : {}}>
+                              style={(data as unknown as Record<string, string>)[field] === opt ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}>
                               {opt === "yes" ? "Yes" : "No"}
                             </button>
                           ))}
@@ -842,13 +842,13 @@ export function ApplyForm() {
                     <label key={key}
                       className={`flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition ${
                         (data as unknown as Record<string, boolean>)[key]
-                          ? "border-[#6C3BFF]/40 bg-[#6C3BFF]/5"
+                          ? "border-[#d91b5b]/40 bg-[#d91b5b]/5"
                           : "border-gray-200"
                       } ${errors[key] ? "border-red-300 bg-red-50/50" : ""}`}>
                       <input type="checkbox"
                         checked={(data as unknown as Record<string, boolean>)[key]}
                         onChange={(e) => update(key as keyof FormState, e.target.checked)}
-                        className="mt-0.5 w-4 h-4 accent-[#6C3BFF] flex-shrink-0"
+                        className="mt-0.5 w-4 h-4 accent-[#d91b5b] flex-shrink-0"
                       />
                       <span className="text-sm text-gray-700">{label}</span>
                     </label>
@@ -885,13 +885,13 @@ export function ApplyForm() {
           {step < TOTAL_STEPS ? (
             <button type="button" onClick={next}
               className="px-8 py-2.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90"
-              style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}>
+              style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}>
               Next
             </button>
           ) : (
             <button type="button" onClick={submit} disabled={isSubmitting}
               className="px-8 py-2.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 disabled:opacity-60 flex items-center gap-2"
-              style={{ background: "linear-gradient(135deg,#6C3BFF,#A855F7)" }}>
+              style={{ background: "linear-gradient(135deg,#d91b5b,#faa633)" }}>
               {isSubmitting
                 ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Submitting...</>
                 : "Submit Application"}
@@ -904,9 +904,9 @@ export function ApplyForm() {
         <p>© {new Date().getFullYear()} EDUZAH — All rights reserved</p>
         <p>
           Questions?{" "}
-          <a href="tel:01044222881" className="text-[#6C3BFF]">01044222881</a>
+          <a href="tel:01044222881" className="text-[#d91b5b]">01044222881</a>
           {" "}/{" "}
-          <a href="tel:01146966811" className="text-[#6C3BFF]">01146966811</a>
+          <a href="tel:01146966811" className="text-[#d91b5b]">01146966811</a>
         </p>
       </footer>
     </div>
@@ -950,17 +950,17 @@ function PositionCard({ pos, selected, onClick }: { pos: PositionDef; selected: 
       onClick={onClick}
       className={`w-full text-left p-4 rounded-xl border-2 transition ${
         selected
-          ? "border-[#6C3BFF] bg-[#6C3BFF]/5"
-          : "border-gray-200 hover:border-[#6C3BFF]/40 bg-white"
+          ? "border-[#d91b5b] bg-[#d91b5b]/5"
+          : "border-gray-200 hover:border-[#d91b5b]/40 bg-white"
       }`}
     >
       <div className="flex items-center justify-between">
-        <p className={`font-semibold text-sm ${selected ? "text-[#6C3BFF]" : "text-gray-900"}`}>
+        <p className={`font-semibold text-sm ${selected ? "text-[#d91b5b]" : "text-gray-900"}`}>
           {pos.name}
         </p>
-        {selected && <span className="text-[#6C3BFF] font-bold text-lg">✓</span>}
+        {selected && <span className="text-[#d91b5b] font-bold text-lg">✓</span>}
       </div>
-      <p className={`text-xs mt-0.5 ${pos.type === "paid" ? "text-green-600" : "text-purple-600"}`}>
+      <p className={`text-xs mt-0.5 ${pos.type === "paid" ? "text-green-600" : "text-[#672d86]"}`}>
         {pos.type === "paid" ? "Paid Position" : "Internship (Unpaid)"}
       </p>
     </button>
