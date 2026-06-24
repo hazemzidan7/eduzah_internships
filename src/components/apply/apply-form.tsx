@@ -442,45 +442,58 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ minHeight: 300 }}>
-        {/* Carousel background */}
-        <img
-          key={imgIndex}
-          src={HEADER_IMAGES[imgIndex]}
-          alt="EDUZAH Team"
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-          style={{ objectPosition: "center 20%", opacity: imgVisible ? 1 : 0 }}
-        />
-        {/* Overlay */}
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to right, rgba(50,29,61,0.90) 0%, rgba(50,29,61,0.55) 55%, rgba(50,29,61,0.20) 100%)"
-        }} />
-        {/* Content */}
-        <div className="relative z-10 px-6 py-10 sm:px-10 max-w-lg">
-          <div className="mb-4">
-            <Logo height={34} />
+      <header className="relative overflow-hidden" style={{ background: "#321d3d" }}>
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-stretch">
+
+          {/* Text side */}
+          <div className="flex-1 px-6 pt-8 pb-6 sm:px-10 sm:py-10 flex flex-col justify-center z-10 relative">
+            <div className="mb-4"><Logo height={34} /></div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              Internship & Team Application
+            </h1>
+            <p className="text-white/75 text-sm leading-relaxed">
+              Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
+            </p>
+            <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
+              Our team — last season
+            </p>
+            {/* Dots */}
+            <div className="flex gap-1.5 mt-5">
+              {HEADER_IMAGES.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setImgIndex(i); setImgVisible(true); }}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    height: 6,
+                    width: i === imgIndex ? 20 : 6,
+                    background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.35)"
+                  }}
+                />
+              ))}
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-            Internship & Team Application
-          </h1>
-          <p className="text-white/75 text-sm leading-relaxed">
-            Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
-          </p>
-          <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
-            Our team — last season
-          </p>
-        </div>
-        {/* Dot indicators */}
-        <div className="absolute bottom-3 right-4 flex gap-1.5 z-10">
-          {HEADER_IMAGES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => { setImgIndex(i); setImgVisible(true); }}
-              className="w-1.5 h-1.5 rounded-full transition-all"
-              style={{ background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.4)", width: i === imgIndex ? 16 : 6 }}
+
+          {/* Photo side — full image visible */}
+          <div className="sm:w-72 lg:w-80 flex-shrink-0 flex items-center justify-center px-4 pb-6 sm:py-6 sm:pr-6">
+            <img
+              key={imgIndex}
+              src={HEADER_IMAGES[imgIndex]}
+              alt="EDUZAH Team"
+              className="rounded-2xl shadow-xl transition-opacity duration-700 w-full"
+              style={{
+                opacity: imgVisible ? 1 : 0,
+                maxHeight: 380,
+                objectFit: "contain",
+              }}
             />
-          ))}
+          </div>
+
         </div>
+        {/* Overlay for text side readability */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "linear-gradient(to right, rgba(50,29,61,1) 0%, rgba(50,29,61,0.6) 45%, transparent 65%)"
+        }} />
       </header>
 
       {/* Draft Banner */}
