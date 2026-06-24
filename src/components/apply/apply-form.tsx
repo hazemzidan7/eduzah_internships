@@ -412,30 +412,38 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ minHeight: 340 }}>
-        <img
-          src="/interns-2024.jpg"
-          alt="EDUZAH Interns"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "center 20%" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, rgba(50,29,61,0.93) 0%, rgba(103,45,134,0.80) 100%)" }}
-        />
-        <div className="relative z-10 max-w-3xl mx-auto px-4 py-10">
-          <div className="mb-5">
-            <Logo height={36} />
+      <header style={{ background: "linear-gradient(135deg, #321d3d 0%, #672d86 100%)" }}>
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-stretch">
+          {/* Text side */}
+          <div className="flex-1 px-6 py-10 sm:px-10 flex flex-col justify-center">
+            <div className="mb-5">
+              <Logo height={36} />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+              Internship & Team Application
+            </h1>
+            <p className="text-white/75 text-sm leading-relaxed max-w-sm">
+              Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
+            </p>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-            Internship & Team Application
-          </h1>
-          <p className="text-white/80 text-sm max-w-xl leading-relaxed">
-            Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
-          </p>
-          <p className="text-white/50 text-xs mt-5 uppercase tracking-widest font-medium">
-            Our team — last season
-          </p>
+
+          {/* Photo side */}
+          <div className="sm:w-80 lg:w-96 flex-shrink-0 relative overflow-hidden" style={{ minHeight: 260 }}>
+            <img
+              src="/interns-2024.jpg"
+              alt="EDUZAH Team"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ objectPosition: "center 15%" }}
+            />
+            {/* Blend edges into purple */}
+            <div className="absolute inset-0" style={{
+              background: "linear-gradient(to right, #321d3d 0%, transparent 30%, transparent 100%)"
+            }} />
+            <div className="absolute bottom-0 left-0 right-0 px-4 py-3"
+              style={{ background: "linear-gradient(to top, rgba(50,29,61,0.7), transparent)" }}>
+              <p className="text-white/80 text-xs font-medium uppercase tracking-wider">Our team — last season</p>
+            </div>
+          </div>
         </div>
       </header>
 
