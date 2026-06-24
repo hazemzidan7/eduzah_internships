@@ -9,6 +9,23 @@ import type { ApplicationData } from "@/lib/actions/applications";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
+const HEADER_IMAGES = [
+  "/interns-2024.jpg",
+  "/567654572_122137894472813844_4354580495115461497_n.jpg",
+  "/566222648_122137894484813844_2634875105105746725_n.jpg",
+  "/567130159_122137894664813844_2724487115061981488_n.jpg",
+  "/566209724_122137894556813844_3096815446003175820_n.jpg",
+  "/565705507_122137894616813844_1217385431349264804_n.jpg",
+  "/568115591_122137894460813844_275207714021462090_n.jpg",
+  "/566224148_122137894544813844_6324125913235075860_n.jpg",
+  "/566334375_122137894496813844_7368622175422693217_n.jpg",
+  "/566225068_122137894736813844_8950860276675253843_n.jpg",
+  "/566222962_122137894724813844_6691464258559634610_n.jpg",
+  "/565703549_122137894640813844_3505069987525856593_n.jpg",
+  "/566202763_122137894784813844_3047834751498864968_n.jpg",
+  "/566205399_122137894592813844_1515074371241572226_n.jpg",
+];
+
 const TOTAL_STEPS = 9;
 const STORAGE_KEY = "eduzah-application-draft-v2";
 
@@ -280,6 +297,19 @@ export function ApplyForm() {
   const [cvUploading, setCvUploading] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [hasDraft, setHasDraft] = useState(false);
+  const [imgIndex, setImgIndex] = useState(0);
+  const [imgVisible, setImgVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImgVisible(false);
+      setTimeout(() => {
+        setImgIndex((i) => (i + 1) % HEADER_IMAGES.length);
+        setImgVisible(true);
+      }, 600);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   const fileRef = useRef<HTMLInputElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -412,19 +442,20 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ minHeight: 280 }}>
-        {/* Photo background */}
+      <header className="relative overflow-hidden" style={{ minHeight: 300 }}>
+        {/* Carousel background */}
         <img
-          src="/interns-2024.jpg"
+          key={imgIndex}
+          src={HEADER_IMAGES[imgIndex]}
           alt="EDUZAH Team"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "center 20%" }}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          style={{ objectPosition: "center 20%", opacity: imgVisible ? 1 : 0 }}
         />
-        {/* Light overlay — left heavy, right light so people show clearly */}
+        {/* Overlay */}
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(to right, rgba(50,29,61,0.88) 0%, rgba(50,29,61,0.55) 50%, rgba(50,29,61,0.25) 100%)"
+          background: "linear-gradient(to right, rgba(50,29,61,0.90) 0%, rgba(50,29,61,0.55) 55%, rgba(50,29,61,0.20) 100%)"
         }} />
-        {/* Content — left aligned */}
+        {/* Content */}
         <div className="relative z-10 px-6 py-10 sm:px-10 max-w-lg">
           <div className="mb-4">
             <Logo height={34} />
@@ -438,6 +469,17 @@ export function ApplyForm() {
           <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
             Our team — last season
           </p>
+        </div>
+        {/* Dot indicators */}
+        <div className="absolute bottom-3 right-4 flex gap-1.5 z-10">
+          {HEADER_IMAGES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => { setImgIndex(i); setImgVisible(true); }}
+              className="w-1.5 h-1.5 rounded-full transition-all"
+              style={{ background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.4)", width: i === imgIndex ? 16 : 6 }}
+            />
+          ))}
         </div>
       </header>
 
