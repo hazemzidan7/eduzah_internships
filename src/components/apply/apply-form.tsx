@@ -446,61 +446,58 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ minHeight: 300 }}>
+      <header style={{ background: "#321d3d", display: "flex", minHeight: 340 }}>
 
-        {/* Background carousel — all images stacked, crossfade via opacity */}
-        {HEADER_IMAGES.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt=""
-            aria-hidden
-            loading={i === 0 ? "eager" : "lazy"}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center 20%",
-              opacity: i === imgIndex ? 1 : 0,
-              transition: "opacity 800ms ease-in-out",
-            }}
-          />
-        ))}
-
-        {/* Gradient overlay — heavy on left for text, light on right to show people */}
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to right, rgba(50,29,61,0.95) 0%, rgba(50,29,61,0.75) 40%, rgba(50,29,61,0.35) 70%, rgba(50,29,61,0.15) 100%)"
-        }} />
-
-        {/* Content */}
-        <div className="relative z-10 max-w-3xl mx-auto px-6 py-10 sm:px-10">
-          <div className="mb-5"><Logo height={34} /></div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+        {/* Left — text */}
+        <div style={{ flex: "0 0 auto", width: "min(480px, 55%)", padding: "40px 40px 40px 32px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ marginBottom: 20 }}><Logo height={34} /></div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white" style={{ marginBottom: 10 }}>
             Internship & Team Application
           </h1>
-          <p className="text-white/75 text-sm leading-relaxed max-w-md">
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.6, marginBottom: 16 }}>
             Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
           </p>
-          <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
+          <p className="text-xs uppercase" style={{ color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 14 }}>
             Our team — last season
           </p>
-          {/* Dots */}
-          <div className="flex gap-1.5 mt-4">
+          <div style={{ display: "flex", gap: 6 }}>
             {HEADER_IMAGES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setImgIndex(i)}
-                className="rounded-full transition-all duration-300"
                 style={{
-                  height: 5,
+                  height: 5, borderRadius: 99, border: "none", cursor: "pointer",
                   width: i === imgIndex ? 18 : 5,
-                  background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.35)"
+                  background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.3)",
+                  transition: "all 300ms",
+                  padding: 0,
                 }}
               />
             ))}
           </div>
+        </div>
+
+        {/* Right — photo carousel, full image, no crop */}
+        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+          {HEADER_IMAGES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt="EDUZAH Team"
+              loading={i === 0 ? "eager" : "lazy"}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "center center",
+                background: "#321d3d",
+                opacity: i === imgIndex ? 1 : 0,
+                transition: "opacity 800ms ease-in-out",
+              }}
+            />
+          ))}
         </div>
 
       </header>
