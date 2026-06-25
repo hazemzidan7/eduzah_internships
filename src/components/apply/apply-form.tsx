@@ -443,7 +443,7 @@ export function ApplyForm() {
         }} />
 
         {/* Text */}
-        <div className="relative z-10" style={{ padding: "40px 32px", maxWidth: 500 }}>
+        <div className="relative z-10" style={{ padding: "40px 40px", maxWidth: 560, marginLeft: "8%" }}>
           <div style={{ marginBottom: 20 }}><Logo height={34} /></div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white" style={{ marginBottom: 10 }}>
             Internship & Team Application
