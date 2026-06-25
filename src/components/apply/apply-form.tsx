@@ -90,7 +90,6 @@ const SKILLS_CONFIG: Record<string, SkillField[]> = {
     { key: "sql", label: "SQL", type: "rating" },
     { key: "python", label: "Python", type: "rating" },
     { key: "dashboards", label: "Dashboard Projects (describe briefly)", type: "textarea" },
-    { key: "github", label: "GitHub Profile Link", type: "url" },
   ],
   "Front-End Development Internship": [
     { key: "html", label: "HTML", type: "rating" },
@@ -99,35 +98,28 @@ const SKILLS_CONFIG: Record<string, SkillField[]> = {
     { key: "bootstrap", label: "Bootstrap", type: "rating" },
     { key: "react", label: "React", type: "rating" },
     { key: "angular", label: "Angular", type: "rating" },
-    { key: "portfolio", label: "Portfolio Link", type: "url" },
-    { key: "github", label: "GitHub Profile Link", type: "url" },
   ],
   "Flutter Development Internship": [
     { key: "dart", label: "Dart", type: "rating" },
     { key: "flutter", label: "Flutter", type: "rating" },
     { key: "firebase", label: "Firebase", type: "rating" },
     { key: "published_apps", label: "Published Applications (links)", type: "textarea" },
-    { key: "github", label: "GitHub Profile Link", type: "url" },
   ],
   "UI/UX Design Internship": [
     { key: "figma", label: "Figma", type: "rating" },
     { key: "adobe_xd", label: "Adobe XD", type: "rating" },
     { key: "user_research", label: "User Research", type: "rating" },
     { key: "wireframing", label: "Wireframing", type: "rating" },
-    { key: "portfolio", label: "Portfolio Link", type: "url" },
   ],
   "Graphic Design Internship": [
     { key: "photoshop", label: "Photoshop", type: "rating" },
     { key: "illustrator", label: "Illustrator", type: "rating" },
     { key: "canva", label: "Canva", type: "rating" },
-    { key: "behance", label: "Behance Profile Link", type: "url" },
-    { key: "portfolio", label: "Portfolio Link", type: "url" },
   ],
   "Photography Internship": [
     { key: "photography_exp", label: "Photography Experience", type: "rating" },
     { key: "camera_type", label: "Camera / Equipment Used", type: "text" },
     { key: "editing_software", label: "Editing Software", type: "text" },
-    { key: "portfolio", label: "Portfolio / Instagram Link", type: "url" },
   ],
   "HR Internship": [
     { key: "recruitment", label: "Recruitment Experience", type: "rating" },
@@ -140,14 +132,12 @@ const SKILLS_CONFIG: Record<string, SkillField[]> = {
     { key: "content_creation", label: "Content Creation", type: "rating" },
     { key: "paid_ads", label: "Paid Ads Experience", type: "rating" },
     { key: "marketing_campaigns", label: "Marketing Campaigns (describe briefly)", type: "textarea" },
-    { key: "portfolio", label: "Portfolio / Work Samples Link", type: "url" },
   ],
   "Reels Maker": [
     { key: "video_exp", label: "Short-Form Video Experience", type: "rating" },
     { key: "camera_equipment", label: "Camera / Equipment Used", type: "text" },
     { key: "editing_tools", label: "Editing Tools (CapCut, Premiere, etc.)", type: "text" },
     { key: "platforms", label: "Platforms (Instagram, TikTok, etc.)", type: "text" },
-    { key: "portfolio", label: "Portfolio / Reel Link", type: "url" },
   ],
   "Sales Specialist": [
     { key: "sales_exp", label: "Sales Experience", type: "rating" },
