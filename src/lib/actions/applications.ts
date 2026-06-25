@@ -53,26 +53,30 @@ export interface ApplicationData {
 export async function uploadCv(
   formData: FormData
 ): Promise<{ url: string; filename: string } | { error: string }> {
-  const file = formData.get("cv") as File | null;
-  if (!file) return { error: "No file provided" };
-  if (file.type !== "application/pdf") return { error: "Only PDF files are allowed" };
-  if (file.size > 5 * 1024 * 1024) return { error: "File size must be under 5 MB" };
+  try {
+    const file = formData.get("cv") as File | null;
+    if (!file) return { error: "No file provided" };
+    if (file.type !== "application/pdf") return { error: "Only PDF files are allowed" };
+    if (file.size > 5 * 1024 * 1024) return { error: "File size must be under 5 MB" };
 
-  const admin = createAdminClient();
-  const ext = file.name.split(".").pop() ?? "pdf";
-  const storageName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const admin = createAdminClient();
+    const ext = file.name.split(".").pop() ?? "pdf";
+    const storageName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-  const { error } = await admin.storage
-    .from("application-cvs")
-    .upload(storageName, file, { contentType: "application/pdf", upsert: false });
+    const { error } = await admin.storage
+      .from("application-cvs")
+      .upload(storageName, file, { contentType: "application/pdf", upsert: false });
 
-  if (error) return { error: error.message };
+    if (error) return { error: `Upload failed: ${error.message}` };
 
-  const { data: { publicUrl } } = admin.storage
-    .from("application-cvs")
-    .getPublicUrl(storageName);
+    const { data: { publicUrl } } = admin.storage
+      .from("application-cvs")
+      .getPublicUrl(storageName);
 
-  return { url: publicUrl, filename: file.name };
+    return { url: publicUrl, filename: file.name };
+  } catch (err) {
+    return { error: `Unexpected error: ${err instanceof Error ? err.message : String(err)}` };
+  }
 }
 
 export async function submitApplication(
