@@ -302,15 +302,10 @@ export function ApplyForm() {
   const [submitError, setSubmitError] = useState("");
   const [hasDraft, setHasDraft] = useState(false);
   const [imgIndex, setImgIndex] = useState(0);
-  const [imgVisible, setImgVisible] = useState(true);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setImgVisible(false);
-      setTimeout(() => {
-        setImgIndex((i) => (i + 1) % HEADER_IMAGES.length);
-        setImgVisible(true);
-      }, 600);
+      setImgIndex((i) => (i + 1) % HEADER_IMAGES.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -471,7 +466,7 @@ export function ApplyForm() {
               {HEADER_IMAGES.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => { setImgIndex(i); setImgVisible(true); }}
+                  onClick={() => setImgIndex(i)}
                   className="rounded-full transition-all duration-300"
                   style={{
                     height: 6,
@@ -483,21 +478,27 @@ export function ApplyForm() {
             </div>
           </div>
 
-          {/* Photo side — full image visible */}
+          {/* Photo side — fixed size crossfade */}
           <div className="sm:w-64 md:w-72 lg:w-80 flex-shrink-0 flex items-center justify-center px-4 pb-6 sm:py-5 sm:pr-6">
-            <img
-              key={imgIndex}
-              src={HEADER_IMAGES[imgIndex]}
-              alt="EDUZAH Team"
-              className="rounded-2xl shadow-2xl transition-opacity duration-700"
-              style={{
-                opacity: imgVisible ? 1 : 0,
-                width: "100%",
-                maxHeight: 360,
-                objectFit: "contain",
-                display: "block",
-              }}
-            />
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl" style={{ height: 320 }}>
+              {HEADER_IMAGES.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt="EDUZAH Team"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    opacity: i === imgIndex ? 1 : 0,
+                    transition: "opacity 700ms ease-in-out",
+                  }}
+                />
+              ))}
+            </div>
           </div>
 
         </div>
