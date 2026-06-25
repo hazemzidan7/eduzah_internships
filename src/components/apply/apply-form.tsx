@@ -46,15 +46,15 @@ type PositionType = "technical_internship" | "non_technical_internship" | "paid"
 interface PositionDef {
   name: string;
   type: PositionType;
+  mode?: string;
 }
 
 const POSITIONS: PositionDef[] = [
-  { name: "AI Internship", type: "technical_internship" },
+  { name: "AI Internship", type: "technical_internship", mode: "Online" },
   { name: "Data Analysis Internship", type: "technical_internship" },
   { name: "Front-End Development Internship", type: "technical_internship" },
   { name: "Flutter Development Internship", type: "technical_internship" },
   { name: "UI/UX Design Internship", type: "technical_internship" },
-  { name: "Project Management Internship", type: "non_technical_internship" },
   { name: "Graphic Design Internship", type: "non_technical_internship" },
   { name: "Photography Internship", type: "non_technical_internship" },
   { name: "HR Internship", type: "non_technical_internship" },
@@ -73,13 +73,16 @@ interface SkillField {
 
 const SKILLS_CONFIG: Record<string, SkillField[]> = {
   "AI Internship": [
-    { key: "ai_tools", label: "AI Tools Experience", type: "rating" },
-    { key: "chatgpt", label: "ChatGPT Experience", type: "rating" },
-    { key: "prompt_eng", label: "Prompt Engineering", type: "rating" },
-    { key: "machine_learning", label: "Machine Learning", type: "rating" },
-    { key: "python", label: "Python", type: "rating" },
-    { key: "ai_projects", label: "AI Projects (describe briefly)", type: "textarea" },
-    { key: "github", label: "GitHub Profile Link", type: "url" },
+    { key: "python", label: "Python Experience", type: "rating" },
+    { key: "machine_learning", label: "Machine Learning Experience", type: "rating" },
+    { key: "deep_learning", label: "Deep Learning Experience", type: "rating" },
+    { key: "data_analysis", label: "Data Analysis Experience", type: "rating" },
+    { key: "frameworks", label: "Frameworks & Libraries (TensorFlow, PyTorch, Scikit-learn)", type: "rating" },
+    { key: "sql_databases", label: "SQL / Databases", type: "rating" },
+    { key: "math_stats", label: "Mathematics & Statistics Background", type: "rating" },
+    { key: "git_github", label: "Git & GitHub Experience", type: "rating" },
+    { key: "programming_languages", label: "Other Programming Languages", type: "text" },
+    { key: "kaggle", label: "Kaggle Profile / Competitions Link (Optional)", type: "url" },
   ],
   "Data Analysis Internship": [
     { key: "excel", label: "Excel", type: "rating" },
@@ -112,13 +115,6 @@ const SKILLS_CONFIG: Record<string, SkillField[]> = {
     { key: "user_research", label: "User Research", type: "rating" },
     { key: "wireframing", label: "Wireframing", type: "rating" },
     { key: "portfolio", label: "Portfolio Link", type: "url" },
-  ],
-  "Project Management Internship": [
-    { key: "pm_experience", label: "Project Management Experience", type: "rating" },
-    { key: "leadership", label: "Leadership Experience", type: "rating" },
-    { key: "agile", label: "Agile Knowledge", type: "rating" },
-    { key: "scrum", label: "Scrum Knowledge", type: "rating" },
-    { key: "team_coordination", label: "Team Coordination Experience", type: "rating" },
   ],
   "Graphic Design Internship": [
     { key: "photoshop", label: "Photoshop", type: "rating" },
@@ -163,6 +159,25 @@ const SKILLS_CONFIG: Record<string, SkillField[]> = {
 
 const RATING_OPTIONS = ["None", "Beginner", "Intermediate", "Advanced"];
 
+type LinkVis = "required" | "optional" | "hidden";
+interface PortfolioConfig { portfolio: LinkVis; github: LinkVis; behance: LinkVis; website: LinkVis; }
+
+const PORTFOLIO_CONFIG: Record<string, PortfolioConfig> = {
+  "AI Internship":                     { github: "required",  portfolio: "optional", website: "optional", behance: "hidden"   },
+  "Data Analysis Internship":          { github: "required",  portfolio: "optional", website: "optional", behance: "hidden"   },
+  "Front-End Development Internship":  { github: "required",  portfolio: "required", website: "optional", behance: "optional" },
+  "Flutter Development Internship":    { github: "required",  portfolio: "required", website: "optional", behance: "hidden"   },
+  "UI/UX Design Internship":           { behance: "required", portfolio: "optional", website: "optional", github: "hidden"    },
+  "Graphic Design Internship":         { behance: "required", portfolio: "optional", website: "optional", github: "hidden"    },
+  "Photography Internship":            { portfolio: "required",behance: "optional",  website: "optional", github: "hidden"    },
+  "HR Internship":                     { portfolio: "optional",behance: "hidden",    website: "optional", github: "hidden"    },
+  "Marketing Specialist":              { portfolio: "required",behance: "optional",  website: "optional", github: "hidden"    },
+  "Reels Maker":                       { portfolio: "required",behance: "hidden",    website: "optional", github: "hidden"    },
+  "Sales Specialist":                  { portfolio: "optional",behance: "hidden",    website: "optional", github: "hidden"    },
+};
+
+const DEFAULT_PORTFOLIO: PortfolioConfig = { portfolio: "optional", github: "optional", behance: "optional", website: "optional" };
+
 // ─── Form State ───────────────────────────────────────────────────────────────
 
 interface Experience {
@@ -175,9 +190,9 @@ interface Experience {
 }
 
 interface FormState {
-  fullName: string; mobile: string; whatsapp: string; email: string;
+  fullName: string; whatsapp: string; email: string;
   dateOfBirth: string; gender: string; governorate: string; city: string;
-  currentAddress: string; facebookLink: string; linkedinLink: string;
+  currentAddress: string; linkedinLink: string;
   university: string; faculty: string; department: string; academicStatus: string;
   graduationYear: string; gpa: string; academicAchievements: string;
   position: string; positionType: string;
@@ -192,8 +207,8 @@ interface FormState {
 }
 
 const INITIAL: FormState = {
-  fullName: "", mobile: "", whatsapp: "", email: "", dateOfBirth: "", gender: "",
-  governorate: "", city: "", currentAddress: "", facebookLink: "", linkedinLink: "",
+  fullName: "", whatsapp: "", email: "", dateOfBirth: "", gender: "",
+  governorate: "", city: "", currentAddress: "", linkedinLink: "",
   university: "", faculty: "", department: "", academicStatus: "", graduationYear: "",
   gpa: "", academicAchievements: "", position: "", positionType: "", skills: {},
   hasExperience: "", experiences: [], cvUrl: "", cvFilename: "", portfolioLink: "",
@@ -372,6 +387,11 @@ export function ApplyForm() {
   const submit = async () => {
     const e: Record<string, string> = {};
     if (!data.cvUrl) e.cvUrl = "CV upload is required";
+    // Portfolio links validation based on position
+    const pc = data.position ? (PORTFOLIO_CONFIG[data.position] ?? DEFAULT_PORTFOLIO) : DEFAULT_PORTFOLIO;
+    if (pc.github    === "required" && !data.githubLink.trim())      e.githubLink     = "GitHub link is required for this position";
+    if (pc.portfolio === "required" && !data.portfolioLink.trim())   e.portfolioLink  = "Portfolio link is required for this position";
+    if (pc.behance   === "required" && !data.behanceLink.trim())     e.behanceLink    = "Behance link is required for this position";
     if (!data.whyJoin.trim()) e.whyJoin = "Required";
     if (!data.skillsToGain.trim()) e.skillsToGain = "Required";
     if (!data.valueAdded.trim()) e.valueAdded = "Required";
@@ -386,10 +406,10 @@ export function ApplyForm() {
     setSubmitError("");
 
     const payload: ApplicationData = {
-      fullName: data.fullName, mobile: data.mobile, whatsapp: data.whatsapp,
+      fullName: data.fullName, mobile: data.whatsapp, whatsapp: data.whatsapp,
       email: data.email, dateOfBirth: data.dateOfBirth, gender: data.gender,
       governorate: data.governorate, city: data.city, currentAddress: data.currentAddress,
-      facebookLink: data.facebookLink, linkedinLink: data.linkedinLink,
+      facebookLink: "", linkedinLink: data.linkedinLink,
       university: data.university, faculty: data.faculty, department: data.department,
       academicStatus: data.academicStatus, graduationYear: data.graduationYear,
       gpa: data.gpa, academicAchievements: data.academicAchievements,
@@ -584,9 +604,6 @@ export function ApplyForm() {
                     <Field label="Full Name" required error={errors.fullName}>
                       <Input value={data.fullName} onChange={(v) => update("fullName", v)} placeholder="Your full name" />
                     </Field>
-                    <Field label="Mobile Number" required error={errors.mobile}>
-                      <Input value={data.mobile} onChange={(v) => update("mobile", v)} placeholder="01XXXXXXXXX" type="tel" />
-                    </Field>
                     <Field label="WhatsApp Number" required error={errors.whatsapp}>
                       <Input value={data.whatsapp} onChange={(v) => update("whatsapp", v)} placeholder="01XXXXXXXXX" type="tel" />
                     </Field>
@@ -612,9 +629,6 @@ export function ApplyForm() {
                     <Input value={data.currentAddress} onChange={(v) => update("currentAddress", v)} placeholder="Street, area..." />
                   </Field>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    <Field label="Facebook Profile Link" error={errors.facebookLink}>
-                      <Input value={data.facebookLink} onChange={(v) => update("facebookLink", v)} placeholder="https://facebook.com/..." type="url" />
-                    </Field>
                     <Field label="LinkedIn Profile Link" error={errors.linkedinLink}>
                       <Input value={data.linkedinLink} onChange={(v) => update("linkedinLink", v)} placeholder="https://linkedin.com/in/..." type="url" />
                     </Field>
@@ -645,7 +659,7 @@ export function ApplyForm() {
                     </Field>
                     <Field label="Expected Graduation Year" required error={errors.graduationYear}>
                       <Select value={data.graduationYear} onChange={(v) => update("graduationYear", v)} placeholder="Select year"
-                        options={["2023","2024","2025","2026","2027"].map((y) => ({ value: y, label: y }))} />
+                        options={["2023","2024","2025","2026","2027","Other"].map((y) => ({ value: y, label: y === "Other" ? "Other (غير ذلك)" : y }))} />
                     </Field>
                     <Field label="GPA (Optional)" error={errors.gpa}>
                       <Input value={data.gpa} onChange={(v) => update("gpa", v)} placeholder="e.g. 3.5 / 4.0" />
@@ -803,20 +817,25 @@ export function ApplyForm() {
                       )}
                     </div>
                   </Field>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <Field label="Portfolio Link" error={errors.portfolioLink}>
-                      <Input value={data.portfolioLink} onChange={(v) => update("portfolioLink", v)} type="url" placeholder="https://..." />
-                    </Field>
-                    <Field label="GitHub Link" error={errors.githubLink}>
-                      <Input value={data.githubLink} onChange={(v) => update("githubLink", v)} type="url" placeholder="https://github.com/..." />
-                    </Field>
-                    <Field label="Behance Link" error={errors.behanceLink}>
-                      <Input value={data.behanceLink} onChange={(v) => update("behanceLink", v)} type="url" placeholder="https://behance.net/..." />
-                    </Field>
-                    <Field label="Personal Website" error={errors.personalWebsite}>
-                      <Input value={data.personalWebsite} onChange={(v) => update("personalWebsite", v)} type="url" placeholder="https://yoursite.com" />
-                    </Field>
-                  </div>
+                  {(() => {
+                    const pc = data.position ? (PORTFOLIO_CONFIG[data.position] ?? DEFAULT_PORTFOLIO) : DEFAULT_PORTFOLIO;
+                    const fields: { key: keyof FormState; label: string; placeholder: string; vis: LinkVis }[] = [
+                      { key: "githubLink",     label: "GitHub Link",      placeholder: "https://github.com/...",  vis: pc.github    },
+                      { key: "portfolioLink",  label: "Portfolio Link",   placeholder: "https://...",              vis: pc.portfolio  },
+                      { key: "behanceLink",    label: "Behance Link",     placeholder: "https://behance.net/...", vis: pc.behance   },
+                      { key: "personalWebsite",label: "Personal Website", placeholder: "https://yoursite.com",    vis: pc.website   },
+                    ];
+                    const visible = fields.filter(f => f.vis !== "hidden");
+                    return (
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {visible.map(f => (
+                          <Field key={f.key} label={`${f.label}${f.vis === "required" ? "" : " (Optional)"}`} required={f.vis === "required"} error={errors[f.key]}>
+                            <Input value={(data as unknown as Record<string,string>)[f.key]} onChange={(v) => update(f.key, v)} type="url" placeholder={f.placeholder} />
+                          </Field>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
@@ -1031,9 +1050,16 @@ function PositionCard({ pos, selected, onClick }: { pos: PositionDef; selected: 
         </p>
         {selected && <span className="text-[#d91b5b] font-bold text-lg">✓</span>}
       </div>
-      <p className={`text-xs mt-0.5 ${pos.type === "paid" ? "text-green-600" : "text-[#672d86]"}`}>
-        {pos.type === "paid" ? "Paid Position" : "Internship (Unpaid)"}
-      </p>
+      <div className="flex items-center gap-2 mt-1 flex-wrap">
+        <p className={`text-xs ${pos.type === "paid" ? "text-green-600" : "text-[#672d86]"}`}>
+          {pos.type === "paid" ? "Paid Position" : "Internship (Unpaid)"}
+        </p>
+        {pos.mode && (
+          <span className="text-xs px-1.5 py-0.5 rounded font-semibold" style={{ background: "#e0f2fe", color: "#0369a1" }}>
+            {pos.mode}
+          </span>
+        )}
+      </div>
     </button>
   );
 }
