@@ -446,66 +446,63 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ background: "#321d3d" }}>
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-stretch">
+      <header className="relative overflow-hidden" style={{ minHeight: 300 }}>
 
-          {/* Text side */}
-          <div className="flex-1 px-6 pt-8 pb-6 sm:px-10 sm:py-10 flex flex-col justify-center z-10 relative">
-            <div className="mb-4"><Logo height={34} /></div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-              Internship & Team Application
-            </h1>
-            <p className="text-white/75 text-sm leading-relaxed">
-              Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
-            </p>
-            <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
-              Our team — last season
-            </p>
-            {/* Dots */}
-            <div className="flex gap-1.5 mt-5">
-              {HEADER_IMAGES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setImgIndex(i)}
-                  className="rounded-full transition-all duration-300"
-                  style={{
-                    height: 6,
-                    width: i === imgIndex ? 20 : 6,
-                    background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.35)"
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+        {/* Background carousel — all images stacked, crossfade via opacity */}
+        {HEADER_IMAGES.map((src, i) => (
+          <img
+            key={src}
+            src={src}
+            alt=""
+            aria-hidden
+            loading={i === 0 ? "eager" : "lazy"}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              objectPosition: "center 20%",
+              opacity: i === imgIndex ? 1 : 0,
+              transition: "opacity 800ms ease-in-out",
+            }}
+          />
+        ))}
 
-          {/* Photo side — fixed size crossfade */}
-          <div className="sm:w-64 md:w-72 lg:w-80 flex-shrink-0 flex items-center justify-center px-4 pb-6 sm:py-5 sm:pr-6">
-            <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl" style={{ height: 320 }}>
-              {HEADER_IMAGES.map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt="EDUZAH Team"
-                  loading={i === 0 ? "eager" : "lazy"}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                    opacity: i === imgIndex ? 1 : 0,
-                    transition: "opacity 700ms ease-in-out",
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-
-        </div>
-        {/* Overlay for text side readability */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "linear-gradient(to right, rgba(50,29,61,1) 0%, rgba(50,29,61,0.6) 45%, transparent 65%)"
+        {/* Gradient overlay — heavy on left for text, light on right to show people */}
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(to right, rgba(50,29,61,0.95) 0%, rgba(50,29,61,0.75) 40%, rgba(50,29,61,0.35) 70%, rgba(50,29,61,0.15) 100%)"
         }} />
+
+        {/* Content */}
+        <div className="relative z-10 max-w-3xl mx-auto px-6 py-10 sm:px-10">
+          <div className="mb-5"><Logo height={34} /></div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+            Internship & Team Application
+          </h1>
+          <p className="text-white/75 text-sm leading-relaxed max-w-md">
+            Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
+          </p>
+          <p className="text-white/45 text-xs mt-4 uppercase tracking-widest font-medium">
+            Our team — last season
+          </p>
+          {/* Dots */}
+          <div className="flex gap-1.5 mt-4">
+            {HEADER_IMAGES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setImgIndex(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  height: 5,
+                  width: i === imgIndex ? 18 : 5,
+                  background: i === imgIndex ? "#faa633" : "rgba(255,255,255,0.35)"
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
       </header>
 
       {/* Draft Banner */}
