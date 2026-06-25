@@ -423,37 +423,29 @@ export function ApplyForm() {
     <div className="min-h-screen" style={{ background: "#F8F7FF" }} ref={topRef}>
 
       {/* Header */}
-      <header className="relative overflow-hidden" style={{ minHeight: 360 }}>
+      <header style={{ background: "#321d3d", display: "flex", minHeight: 340 }}>
 
-        {/* Full-width background photo */}
-        <img
-          src="/team-photo.jpg"
-          alt="EDUZAH Team"
-          style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center 30%",
-          }}
-        />
-
-        {/* Overlay: dark only on the left behind text, transparent on the right */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to right, rgba(50,29,61,0.88) 0%, rgba(50,29,61,0.60) 35%, rgba(50,29,61,0.15) 65%, rgba(50,29,61,0.05) 100%)",
-        }} />
-
-        {/* Content */}
-        <div className="relative z-10" style={{ padding: "40px 40px 40px 32px", maxWidth: 480 }}>
+        {/* Left — text */}
+        <div style={{ flex: "0 0 auto", width: "min(480px, 55%)", padding: "40px 40px 40px 32px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ marginBottom: 20 }}><Logo height={34} /></div>
           <h1 className="text-2xl sm:text-3xl font-bold text-white" style={{ marginBottom: 10 }}>
             Internship & Team Application
           </h1>
-          <p className="text-sm" style={{ color: "rgba(255,255,255,0.80)", lineHeight: 1.6, marginBottom: 16 }}>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.6, marginBottom: 16 }}>
             Thank you for your interest in joining EDUZAH. Please complete all required information accurately.
           </p>
-          <p className="text-xs uppercase" style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}>
+          <p className="text-xs uppercase" style={{ color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>
             Our team — last season
           </p>
+        </div>
+
+        {/* Right — full photo, no crop */}
+        <div style={{ flex: 1, overflow: "hidden" }}>
+          <img
+            src="/team-photo.jpg"
+            alt="EDUZAH Team"
+            style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center center", background: "#321d3d" }}
+          />
         </div>
 
       </header>
