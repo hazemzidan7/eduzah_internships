@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EDUZAH",
-  description: "Premium learning management platform",
+  title: "EDUZAH Internship",
+  description: "EDUZAH Internship & Team Application",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
