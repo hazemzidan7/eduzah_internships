@@ -607,36 +607,6 @@ export function ApplyForm() {
               {/* Step 1 */}
               {step === 1 && (
                 <div className="space-y-5">
-                  {/* National ID — auto-fills DOB, gender, governorate */}
-                  <Field label="رقم البطاقة الوطنية (National ID) — للمصريين فقط / Optional" error={errors.nationalId}>
-                    <div className="relative">
-                      <Input
-                        value={data.nationalId}
-                        onChange={(v) => {
-                          update("nationalId", v);
-                          if (v.length === 14) {
-                            const parsed = parseNationalId(v);
-                            if (parsed) {
-                              update("dateOfBirth", parsed.dateOfBirth);
-                              update("gender", parsed.gender);
-                              if (parsed.governorate) update("governorate", parsed.governorate);
-                            }
-                          }
-                        }}
-                        placeholder="ادخل رقم البطاقة (14 رقم)"
-                      />
-                      {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-sm font-bold">✓ تم التعرف</span>
-                      )}
-                    </div>
-                    {data.nationalId.length === 14 && !parseNationalId(data.nationalId) && (
-                      <p className="text-xs text-red-400 mt-1">رقم البطاقة غير صحيح</p>
-                    )}
-                    {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
-                      <p className="text-xs text-green-600 mt-1">تم تعبئة تاريخ الميلاد، الجنس، والمحافظة تلقائياً</p>
-                    )}
-                  </Field>
-
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Field label="Full Name" required error={errors.fullName}>
                       <Input value={data.fullName} onChange={(v) => update("fullName", v)} placeholder="Your full name" />
@@ -647,6 +617,34 @@ export function ApplyForm() {
                     <Field label="Email Address" required error={errors.email}>
                       <Input value={data.email} onChange={(v) => update("email", v)} placeholder="you@example.com" type="email" />
                     </Field>
+
+                    {/* National ID — auto-fills DOB, gender, governorate */}
+                    <Field label="National ID" error={errors.nationalId}>
+                      <div className="relative">
+                        <Input
+                          value={data.nationalId}
+                          onChange={(v) => {
+                            update("nationalId", v);
+                            if (v.length === 14) {
+                              const parsed = parseNationalId(v);
+                              if (parsed) {
+                                update("dateOfBirth", parsed.dateOfBirth);
+                                update("gender", parsed.gender);
+                                if (parsed.governorate) update("governorate", parsed.governorate);
+                              }
+                            }
+                          }}
+                          placeholder="14-digit national ID"
+                        />
+                        {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-xs font-bold">✓ Auto-filled</span>
+                        )}
+                      </div>
+                      {data.nationalId.length === 14 && !parseNationalId(data.nationalId) && (
+                        <p className="text-xs text-red-400 mt-1">Invalid national ID number</p>
+                      )}
+                    </Field>
+
                     <Field label="Date of Birth" required error={errors.dateOfBirth}>
                       <Input value={data.dateOfBirth} onChange={(v) => update("dateOfBirth", v)} type="date" />
                     </Field>
