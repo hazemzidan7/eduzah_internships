@@ -608,7 +608,7 @@ export function ApplyForm() {
               {step === 1 && (
                 <div className="space-y-5">
                   {/* National ID — auto-fills DOB, gender, governorate */}
-                  <Field label="رقم البطاقة الوطنية (National ID)" error={errors.nationalId}>
+                  <Field label="رقم البطاقة الوطنية (National ID) — للمصريين فقط / Optional" error={errors.nationalId}>
                     <div className="relative">
                       <Input
                         value={data.nationalId}
