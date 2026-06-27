@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export interface ApplicationData {
+  nationalId: string;
   fullName: string;
   mobile: string;
   whatsapp: string;
@@ -87,6 +88,7 @@ export async function submitApplication(
   const { data, error } = await admin
     .from("internship_applications")
     .insert({
+      national_id: application.nationalId || null,
       full_name: application.fullName,
       mobile: application.mobile,
       whatsapp: application.whatsapp,

@@ -165,6 +165,7 @@ interface Experience {
 }
 
 interface FormState {
+  nationalId: string;
   fullName: string; whatsapp: string; email: string;
   dateOfBirth: string; gender: string; governorate: string; city: string;
   currentAddress: string; linkedinLink: string;
@@ -181,7 +182,37 @@ interface FormState {
   confirmAccurate: boolean; confirmUnpaid: boolean; agreePolicy: boolean; agreeContact: boolean;
 }
 
+// Egyptian National ID parser
+const GOVERNORATE_CODES: Record<string, string> = {
+  "01": "Cairo", "02": "Alexandria", "03": "Port Said", "04": "Suez",
+  "11": "Damietta", "12": "Dakahlia", "13": "Sharqia", "14": "Qalyubia",
+  "15": "Kafr El Sheikh", "16": "Gharbia", "17": "Menofia", "18": "Beheira",
+  "19": "Ismailia", "21": "Giza", "22": "Beni Suef", "23": "Faiyum",
+  "24": "Minya", "25": "Asyut", "26": "Sohag", "27": "Qena",
+  "28": "Aswan", "29": "Luxor", "31": "Red Sea", "32": "New Valley",
+  "33": "Matruh", "34": "North Sinai", "35": "South Sinai",
+};
+
+function parseNationalId(id: string): { dateOfBirth: string; gender: string; governorate: string } | null {
+  if (!/^\d{14}$/.test(id)) return null;
+  const century = id[0] === "2" ? "19" : id[0] === "3" ? "20" : null;
+  if (!century) return null;
+  const year  = century + id.substring(1, 3);
+  const month = id.substring(3, 5);
+  const day   = id.substring(5, 7);
+  const govCode = id.substring(7, 9);
+  const genderDigit = parseInt(id[12]);
+  const m = parseInt(month), d = parseInt(day);
+  if (m < 1 || m > 12 || d < 1 || d > 31) return null;
+  return {
+    dateOfBirth: `${year}-${month}-${day}`,
+    gender: genderDigit % 2 === 1 ? "Male" : "Female",
+    governorate: GOVERNORATE_CODES[govCode] ?? "",
+  };
+}
+
 const INITIAL: FormState = {
+  nationalId: "",
   fullName: "", whatsapp: "", email: "", dateOfBirth: "", gender: "",
   governorate: "", city: "", currentAddress: "", linkedinLink: "",
   university: "", faculty: "", department: "", academicStatus: "", graduationYear: "",
@@ -402,6 +433,7 @@ export function ApplyForm() {
     setSubmitError("");
 
     const payload: ApplicationData = {
+      nationalId: data.nationalId,
       fullName: data.fullName, mobile: data.whatsapp, whatsapp: data.whatsapp,
       email: data.email, dateOfBirth: data.dateOfBirth, gender: data.gender,
       governorate: data.governorate, city: data.city, currentAddress: data.currentAddress,
@@ -575,6 +607,36 @@ export function ApplyForm() {
               {/* Step 1 */}
               {step === 1 && (
                 <div className="space-y-5">
+                  {/* National ID — auto-fills DOB, gender, governorate */}
+                  <Field label="رقم البطاقة الوطنية (National ID)" error={errors.nationalId}>
+                    <div className="relative">
+                      <Input
+                        value={data.nationalId}
+                        onChange={(v) => {
+                          update("nationalId", v);
+                          if (v.length === 14) {
+                            const parsed = parseNationalId(v);
+                            if (parsed) {
+                              update("dateOfBirth", parsed.dateOfBirth);
+                              update("gender", parsed.gender);
+                              if (parsed.governorate) update("governorate", parsed.governorate);
+                            }
+                          }
+                        }}
+                        placeholder="ادخل رقم البطاقة (14 رقم)"
+                      />
+                      {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-sm font-bold">✓ تم التعرف</span>
+                      )}
+                    </div>
+                    {data.nationalId.length === 14 && !parseNationalId(data.nationalId) && (
+                      <p className="text-xs text-red-400 mt-1">رقم البطاقة غير صحيح</p>
+                    )}
+                    {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
+                      <p className="text-xs text-green-600 mt-1">تم تعبئة تاريخ الميلاد، الجنس، والمحافظة تلقائياً</p>
+                    )}
+                  </Field>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Field label="Full Name" required error={errors.fullName}>
                       <Input value={data.fullName} onChange={(v) => update("fullName", v)} placeholder="Your full name" />
