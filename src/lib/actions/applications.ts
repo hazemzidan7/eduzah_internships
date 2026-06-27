@@ -104,8 +104,6 @@ export async function submitApplication(
     .insert({
       nationality: application.nationality || null,
       national_id: application.nationalId || null,
-      had_eduzah_service: application.hadEduzahService || null,
-      eduzah_service_name: application.eduzahServiceName || null,
       full_name: application.fullName,
       mobile: application.mobile,
       whatsapp: application.whatsapp,
@@ -126,7 +124,11 @@ export async function submitApplication(
       academic_achievements: application.academicAchievements || null,
       position: application.position,
       position_type: application.positionType,
-      skills: application.skills,
+      skills: {
+        ...application.skills,
+        ...(application.hadEduzahService ? { _eduzah_prev_client: application.hadEduzahService } : {}),
+        ...(application.eduzahServiceName ? { _eduzah_service: application.eduzahServiceName } : {}),
+      },
       has_experience: application.hasExperience,
       experiences: application.experiences,
       cv_url: application.cvUrl,
