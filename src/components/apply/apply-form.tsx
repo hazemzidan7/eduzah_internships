@@ -616,7 +616,7 @@ export function ApplyForm() {
                     <div className="flex gap-3">
                       {[
                         { value: "Egyptian",     label: "Egyptian 🇪🇬" },
-                        { value: "Non-Egyptian", label: "Non-Egyptian 🌍" },
+                        { value: "Non-Egyptian", label: "Non-Egyptian" },
                       ].map((opt) => (
                         <button key={opt.value} type="button"
                           onClick={() => { update("nationality", opt.value); if (opt.value === "Non-Egyptian") update("nationalId", ""); }}
