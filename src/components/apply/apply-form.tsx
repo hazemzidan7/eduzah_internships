@@ -165,6 +165,7 @@ interface Experience {
 }
 
 interface FormState {
+  nationality: string;
   nationalId: string;
   fullName: string; whatsapp: string; email: string;
   dateOfBirth: string; gender: string; governorate: string; city: string;
@@ -212,6 +213,7 @@ function parseNationalId(id: string): { dateOfBirth: string; gender: string; gov
 }
 
 const INITIAL: FormState = {
+  nationality: "",
   nationalId: "",
   fullName: "", whatsapp: "", email: "", dateOfBirth: "", gender: "",
   governorate: "", city: "", currentAddress: "", linkedinLink: "",
@@ -382,6 +384,8 @@ export function ApplyForm() {
     const missing: string[] = [];
 
     // Step 1
+    if (!data.nationality) missing.push("Nationality (Step 1)");
+    if (data.nationality === "Egyptian" && !data.nationalId.trim()) missing.push("National ID (Step 1)");
     if (!data.fullName.trim()) missing.push("Full Name (Step 1)");
     if (!data.whatsapp.trim()) missing.push("WhatsApp Number (Step 1)");
     if (!data.email.trim()) missing.push("Email Address (Step 1)");
@@ -607,6 +611,25 @@ export function ApplyForm() {
               {/* Step 1 */}
               {step === 1 && (
                 <div className="space-y-5">
+                  {/* Nationality toggle */}
+                  <Field label="Nationality" required error={errors.nationality}>
+                    <div className="flex gap-3">
+                      {[
+                        { value: "Egyptian",     label: "Egyptian 🇪🇬" },
+                        { value: "Non-Egyptian", label: "Non-Egyptian 🌍" },
+                      ].map((opt) => (
+                        <button key={opt.value} type="button"
+                          onClick={() => { update("nationality", opt.value); if (opt.value === "Non-Egyptian") update("nationalId", ""); }}
+                          className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition ${
+                            data.nationality === opt.value ? "text-white border-transparent" : "border-gray-200 text-gray-600"
+                          }`}
+                          style={data.nationality === opt.value ? { background: "linear-gradient(135deg,#d91b5b,#faa633)" } : {}}>
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </Field>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <Field label="Full Name" required error={errors.fullName}>
                       <Input value={data.fullName} onChange={(v) => update("fullName", v)} placeholder="Your full name" />
@@ -618,32 +641,37 @@ export function ApplyForm() {
                       <Input value={data.email} onChange={(v) => update("email", v)} placeholder="you@example.com" type="email" />
                     </Field>
 
-                    {/* National ID — auto-fills DOB, gender, governorate */}
-                    <Field label="National ID" error={errors.nationalId}>
-                      <div className="relative">
-                        <Input
-                          value={data.nationalId}
-                          onChange={(v) => {
-                            update("nationalId", v);
-                            if (v.length === 14) {
-                              const parsed = parseNationalId(v);
-                              if (parsed) {
-                                update("dateOfBirth", parsed.dateOfBirth);
-                                update("gender", parsed.gender);
-                                if (parsed.governorate) update("governorate", parsed.governorate);
+                    {/* National ID — required for Egyptians only */}
+                    {data.nationality === "Egyptian" && (
+                      <Field label="National ID" required error={errors.nationalId}>
+                        <div className="relative">
+                          <Input
+                            value={data.nationalId}
+                            onChange={(v) => {
+                              update("nationalId", v);
+                              if (v.length === 14) {
+                                const parsed = parseNationalId(v);
+                                if (parsed) {
+                                  update("dateOfBirth", parsed.dateOfBirth);
+                                  update("gender", parsed.gender);
+                                  if (parsed.governorate) update("governorate", parsed.governorate);
+                                }
                               }
-                            }
-                          }}
-                          placeholder="14-digit national ID"
-                        />
-                        {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-xs font-bold">✓ Auto-filled</span>
+                            }}
+                            placeholder="14-digit national ID"
+                          />
+                          {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-xs font-bold">✓ Auto-filled</span>
+                          )}
+                        </div>
+                        {data.nationalId.length === 14 && !parseNationalId(data.nationalId) && (
+                          <p className="text-xs text-red-400 mt-1">Invalid national ID number</p>
                         )}
-                      </div>
-                      {data.nationalId.length === 14 && !parseNationalId(data.nationalId) && (
-                        <p className="text-xs text-red-400 mt-1">Invalid national ID number</p>
-                      )}
-                    </Field>
+                        {data.nationalId.length === 14 && parseNationalId(data.nationalId) && (
+                          <p className="text-xs text-green-600 mt-1">Date of birth, gender & governorate auto-filled</p>
+                        )}
+                      </Field>
+                    )}
 
                     <Field label="Date of Birth" required error={errors.dateOfBirth}>
                       <Input value={data.dateOfBirth} onChange={(v) => update("dateOfBirth", v)} type="date" />
