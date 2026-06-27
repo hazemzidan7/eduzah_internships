@@ -35,17 +35,17 @@ interface PositionDef {
 }
 
 const POSITIONS: PositionDef[] = [
-  { name: "AI Internship", type: "technical_internship", mode: "Online" },
-  { name: "Data Analysis Internship", type: "technical_internship" },
-  { name: "Front-End Development Internship", type: "technical_internship" },
-  { name: "Flutter Development Internship", type: "technical_internship" },
-  { name: "UI/UX Design Internship", type: "technical_internship" },
-  { name: "Graphic Design Internship", type: "non_technical_internship" },
-  { name: "Photography Internship", type: "non_technical_internship" },
-  { name: "HR Internship", type: "non_technical_internship" },
-  { name: "Marketing Specialist", type: "paid" },
-  { name: "Reels Maker", type: "paid" },
-  { name: "Sales Specialist", type: "paid" },
+  { name: "AI Internship",                   type: "technical_internship",     mode: "Remote"          },
+  { name: "Data Analysis Internship",        type: "technical_internship",     mode: "Hybrid"          },
+  { name: "Front-End Development Internship",type: "technical_internship",     mode: "Hybrid"          },
+  { name: "Flutter Development Internship",  type: "technical_internship",     mode: "Hybrid"          },
+  { name: "UI/UX Design Internship",         type: "technical_internship",     mode: "Hybrid"          },
+  { name: "Graphic Design Internship",       type: "non_technical_internship", mode: "Hybrid"          },
+  { name: "Photography Internship",          type: "non_technical_internship", mode: "Hybrid"          },
+  { name: "HR Internship",                   type: "non_technical_internship", mode: "Hybrid"          },
+  { name: "Marketing Specialist",            type: "paid",                     mode: "Hybrid"          },
+  { name: "Reels Maker",                     type: "paid",                     mode: "Hybrid"          },
+  { name: "Sales Specialist",                type: "paid",                     mode: "Hybrid / Remote" },
 ];
 
 type SkillFieldType = "rating" | "text" | "url" | "textarea";
@@ -1236,7 +1236,10 @@ function PositionCard({ pos, selected, onClick }: { pos: PositionDef; selected: 
           {pos.type === "paid" ? "Paid Position" : "Internship (Unpaid)"}
         </p>
         {pos.mode && (
-          <span className="text-xs px-1.5 py-0.5 rounded font-semibold" style={{ background: "#e0f2fe", color: "#0369a1" }}>
+          <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{
+            background: pos.mode === "Remote" ? "#fef3c7" : pos.mode === "Hybrid / Remote" ? "#ede9fe" : "#e0f2fe",
+            color:      pos.mode === "Remote" ? "#92400e" : pos.mode === "Hybrid / Remote" ? "#5b21b6"  : "#0369a1",
+          }}>
             {pos.mode}
           </span>
         )}
