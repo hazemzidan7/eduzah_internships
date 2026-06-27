@@ -437,6 +437,7 @@ export function ApplyForm() {
     setSubmitError("");
 
     const payload: ApplicationData = {
+      nationality: data.nationality,
       nationalId: data.nationalId,
       fullName: data.fullName, mobile: data.whatsapp, whatsapp: data.whatsapp,
       email: data.email, dateOfBirth: data.dateOfBirth, gender: data.gender,

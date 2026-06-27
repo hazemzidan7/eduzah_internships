@@ -98,21 +98,43 @@ function formatDate(d: string) {
   return new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
+// Escape CSV cells to prevent injection attacks
+function escapeCsv(v: unknown): string {
+  const str = String(v ?? "");
+  // Prefix formula injection characters
+  const safe = /^[=+\-@\t\r]/.test(str) ? `'${str}` : str;
+  return `"${safe.replace(/"/g, '""')}"`;
+}
+
 function exportToCSV(applications: Application[]) {
   const headers = [
-    "ID","Name","Email","WhatsApp","Position","Type","University","Faculty","Department",
-    "Academic Status","Graduation Year","GPA","Governorate","City","Status","Applied At","CV URL",
-    "Portfolio","GitHub","Behance","Hours/Week",
+    "ID","Name","Email","WhatsApp","Gender","Date of Birth","Nationality",
+    "Position","Type","University","Faculty","Department",
+    "Academic Status","Graduation Year","GPA",
+    "Governorate","City","Address",
+    "LinkedIn","Status","Has Experience","Hours/Week",
+    "Can Attend Offline","Can Attend Online",
+    "CV URL","Portfolio","GitHub","Behance","Website",
+    "Applied At",
   ];
   const rows = applications.map((a) => [
-    a.id, a.full_name, a.email, a.whatsapp, a.position,
-    POSITION_TYPES[a.position_type] ?? a.position_type, a.university, a.faculty, a.department,
+    a.id, a.full_name, a.email, a.whatsapp,
+    a.gender ?? "", a.date_of_birth ?? "", "",
+    a.position, POSITION_TYPES[a.position_type] ?? a.position_type,
+    a.university, a.faculty, a.department,
     a.academic_status, a.graduation_year, a.gpa ?? "",
-    a.governorate, a.city, a.status, formatDate(a.created_at), a.cv_url,
-    a.portfolio_link ?? "", a.github_link ?? "", a.behance_link ?? "", a.hours_per_week,
+    a.governorate, a.city, a.current_address ?? "",
+    a.linkedin_link ?? "", a.status,
+    a.has_experience ? "Yes" : "No", a.hours_per_week,
+    a.can_attend_offline === true ? "Yes" : a.can_attend_offline === false ? "No" : "",
+    a.can_attend_online  === true ? "Yes" : a.can_attend_online  === false ? "No" : "",
+    a.cv_url, a.portfolio_link ?? "", a.github_link ?? "", a.behance_link ?? "", a.personal_website ?? "",
+    formatDate(a.created_at),
   ]);
-  const csv = [headers, ...rows].map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const csv = [headers, ...rows]
+    .map((r) => r.map(escapeCsv).join(","))
+    .join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -272,7 +294,7 @@ export function AdminPortalDashboard({
               <p className="text-sm font-semibold text-gray-700">Filters</p>
               {hasFilters && <button onClick={clearFilters} className="text-xs text-red-500 hover:text-red-700">Clear all</button>}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2">
               {[
                 { key: "position",       placeholder: "All Positions",    options: ALL_POSITIONS.map(p => ({ value: p, label: p })) },
                 { key: "positionType",   placeholder: "All Types",        options: Object.entries(POSITION_TYPES).map(([k,v]) => ({ value: k, label: v })) },
@@ -280,6 +302,7 @@ export function AdminPortalDashboard({
                 { key: "graduationYear", placeholder: "All Years",        options: ["2023","2024","2025","2026","2027","Other"].map(y => ({ value: y, label: y })) },
                 { key: "academicStatus", placeholder: "All Academic",     options: ["Student","Fresh Graduate","Working & Studying"].map(s => ({ value: s, label: s })) },
                 { key: "governorate",    placeholder: "All Governorates", options: EGYPT_GOVERNORATES.map(g => ({ value: g, label: g })) },
+                { key: "hasExperience", placeholder: "Experience",        options: [{ value: "true", label: "Has Experience" }, { value: "false", label: "No Experience" }] },
               ].map(({ key, placeholder, options }) => (
                 <select key={key} value={activeFilters[key] ?? ""}
                   onChange={(e) => applyFilter(key, e.target.value)}

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export interface ApplicationData {
+  nationality: string;
   nationalId: string;
   fullName: string;
   mobile: string;
@@ -85,9 +86,21 @@ export async function submitApplication(
 ): Promise<{ id: string } | { error: string }> {
   const admin = createAdminClient();
 
+  // Rate limiting — max 3 submissions per email per 24h
+  const since = new Date(Date.now() - 86400000).toISOString();
+  const { count } = await admin
+    .from("internship_applications")
+    .select("id", { count: "exact", head: true })
+    .eq("email", application.email.toLowerCase().trim())
+    .gte("created_at", since);
+  if ((count ?? 0) >= 3) {
+    return { error: "You have already submitted 3 applications in the last 24 hours. Please try again tomorrow." };
+  }
+
   const { data, error } = await admin
     .from("internship_applications")
     .insert({
+      nationality: application.nationality || null,
       national_id: application.nationalId || null,
       full_name: application.fullName,
       mobile: application.mobile,
