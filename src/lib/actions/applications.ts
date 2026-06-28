@@ -166,13 +166,13 @@ export async function updateApplicationStatus(
     .from("internship_applications")
     .update({ status, admin_notes: notes ?? null })
     .eq("id", id);
-  revalidatePath("/admin/applications");
+  revalidatePath("/admin-portal/applications");
 }
 
 export async function deleteApplication(id: string): Promise<void> {
   const admin = createAdminClient();
   await admin.from("internship_applications").delete().eq("id", id);
-  revalidatePath("/admin/applications");
+  revalidatePath("/admin-portal/applications");
   revalidatePath("/admin-portal/applications");
 }
 
