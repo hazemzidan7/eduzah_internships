@@ -949,21 +949,20 @@ export function ApplyForm() {
                 <div className="space-y-6">
                   {errors.position && <p className="text-sm text-red-500">Please select a position</p>}
 
-                  <PositionGroup
+                  {/* Technical — Closed */}
+                  <ClosedSection
                     title="Technical Internships"
                     badge="Internship — Unpaid"
                     badgeColor="#672d86"
                     positions={POSITIONS.filter((p) => p.type === "technical_internship")}
-                    selected={data.position}
-                    onSelect={(pos) => { update("position", pos.name); update("positionType", pos.type); update("skills", {}); }}
                   />
-                  <PositionGroup
+
+                  {/* Non-Technical — Closed */}
+                  <ClosedSection
                     title="Non-Technical Internships"
                     badge="Internship — Unpaid"
                     badgeColor="#672d86"
                     positions={POSITIONS.filter((p) => p.type === "non_technical_internship")}
-                    selected={data.position}
-                    onSelect={(pos) => { update("position", pos.name); update("positionType", pos.type); update("skills", {}); }}
                   />
                   <PositionGroup
                     title="Paid Positions"
@@ -1284,6 +1283,39 @@ export function ApplyForm() {
 }
 
 // ─── Position Components ──────────────────────────────────────────────────────
+
+function ClosedSection({ title, badge, badgeColor, positions }: {
+  title: string; badge: string; badgeColor: string; positions: PositionDef[];
+}) {
+  return (
+    <div className="relative">
+      <div className="flex items-center gap-2 mb-3">
+        <h3 className="font-semibold text-gray-800">{title}</h3>
+        <span className="text-xs px-2 py-0.5 rounded-full border font-medium"
+          style={{ color: badgeColor, borderColor: `${badgeColor}40`, background: `${badgeColor}10` }}>
+          {badge}
+        </span>
+        <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-red-100 text-red-600 border border-red-200">
+          🔒 Closed
+        </span>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-3 opacity-40 pointer-events-none select-none">
+        {positions.map((pos) => (
+          <div key={pos.name} className="p-4 rounded-xl border-2 border-gray-200 bg-white">
+            <p className="font-semibold text-sm text-gray-500">{pos.name}</p>
+            <p className="text-xs mt-0.5 text-gray-400">Applications closed</p>
+          </div>
+        ))}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="bg-white/95 border border-red-200 rounded-2xl px-5 py-3 text-center shadow-sm">
+          <p className="text-sm font-bold text-red-600">🔒 Applications Closed</p>
+          <p className="text-xs text-gray-500 mt-0.5">This track is currently not accepting applications</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function PositionGroup({ title, badge, badgeColor, positions, selected, onSelect }: {
   title: string;
