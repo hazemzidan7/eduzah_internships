@@ -173,6 +173,7 @@ export async function deleteApplication(id: string): Promise<void> {
   const admin = createAdminClient();
   await admin.from("internship_applications").delete().eq("id", id);
   revalidatePath("/admin/applications");
+  revalidatePath("/admin-portal/applications");
 }
 
 export interface ApplicationFilters {
@@ -211,7 +212,8 @@ export async function getApplicationStats() {
   const admin = createAdminClient();
   const { data, error } = await admin
     .from("internship_applications")
-    .select("position, position_type, graduation_year, academic_status, governorate, status");
+    .select("position, position_type, graduation_year, academic_status, governorate, status")
+    .limit(100000);
 
   if (error) throw new Error(error.message);
   const rows = data ?? [];
