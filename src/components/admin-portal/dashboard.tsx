@@ -162,6 +162,7 @@ export function AdminPortalDashboard({
   const [isPending, startTransition] = useTransition();
   const [statusNote, setStatusNote] = useState("");
   const [view, setView] = useState<"table" | "stats">("table");
+  const [search, setSearch] = useState("");
 
   const applyFilter = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -195,6 +196,19 @@ export function AdminPortalDashboard({
 
   const hasFilters = Object.values(activeFilters).some(Boolean);
 
+  const q = search.toLowerCase().trim();
+  const filteredApps = q
+    ? applications.filter(a =>
+        a.full_name.toLowerCase().includes(q) ||
+        a.email.toLowerCase().includes(q) ||
+        a.whatsapp.includes(q) ||
+        a.position.toLowerCase().includes(q) ||
+        a.governorate.toLowerCase().includes(q) ||
+        a.university.toLowerCase().includes(q) ||
+        a.city.toLowerCase().includes(q)
+      )
+    : applications;
+
   return (
     <div className="min-h-screen" style={{ background: "#F8F7FF" }}>
       {/* Topbar */}
@@ -224,7 +238,10 @@ export function AdminPortalDashboard({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Applications</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{stats.total} total applications received</p>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {stats.total} total
+              {q && <span className="text-[#d91b5b] font-medium"> · {filteredApps.length} results for "{search}"</span>}
+            </p>
           </div>
           <div className="flex gap-2 flex-wrap">
             <button onClick={() => setView(view === "table" ? "stats" : "table")}
@@ -236,6 +253,22 @@ export function AdminPortalDashboard({
               Export CSV
             </button>
           </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm">🔍</span>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name, email, phone, position, university, city..."
+            className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#d91b5b]/30 focus:border-[#d91b5b] shadow-sm"
+          />
+          {search && (
+            <button onClick={() => setSearch("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+          )}
         </div>
 
         {/* Stats Cards */}
@@ -318,11 +351,11 @@ export function AdminPortalDashboard({
         {/* Table */}
         {view === "table" && (
           <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
-            {applications.length === 0 ? (
+            {filteredApps.length === 0 ? (
               <div className="py-16 text-center text-gray-400">
                 <p className="text-3xl mb-2">📭</p>
-                <p className="font-medium">No applications found</p>
-                <p className="text-sm mt-1">{hasFilters ? "Try clearing some filters." : "Applications will appear here once submitted."}</p>
+                <p className="font-medium">{q ? `No results for "${search}"` : "No applications found"}</p>
+                <p className="text-sm mt-1">{q ? "Try a different search term." : hasFilters ? "Try clearing some filters." : "Applications will appear here once submitted."}</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -339,7 +372,7 @@ export function AdminPortalDashboard({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {applications.map((app) => (
+                    {filteredApps.map((app) => (
                       <tr key={app.id} className="hover:bg-gray-50 transition">
                         <td className="px-4 py-3">
                           <p className="font-semibold text-gray-900">{app.full_name}</p>
